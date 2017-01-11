@@ -1,0 +1,29 @@
+#ifndef ADAPTOR_H
+#define ADAPTOR_H
+
+#include "journal.h"
+
+#include <QObject>
+
+class Adaptor : public QObject
+{
+    Q_OBJECT
+    Q_CLASSINFO("D-Bus Interface", "ru.omprussia.systemd.journal")
+public:
+    explicit Adaptor(QObject *parent = 0);
+
+public slots:
+    void start();
+
+private:
+    Journal *m_journal;
+
+signals:
+    Q_SCRIPTABLE void dataReceived(const QVariantMap & data);
+
+public slots:
+    Q_SCRIPTABLE void ping();
+    Q_SCRIPTABLE void quit();
+};
+
+#endif // ADAPTOR_H

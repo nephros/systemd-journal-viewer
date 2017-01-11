@@ -1,0 +1,5 @@
+[D-BUS Service]
+Name=ru.omprussia.systemd.journal
+Interface=ru.omprussia.systemd.journal
+Exec=/bin/false
+SystemdService=systemd-journal-daemon.service
