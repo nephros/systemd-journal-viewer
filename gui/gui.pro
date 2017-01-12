@@ -4,7 +4,7 @@ QT += dbus
 CONFIG += sailfishapp
 
 SOURCES += src/viewer.cpp \
-    src/filelog.cpp
+    src/journalmodel.cpp
 
 OTHER_FILES += qml/systemd-journal-viewer.qml \
     qml/cover/CoverPage.qml \
@@ -18,4 +18,4 @@ CONFIG += sailfishapp_i18n
 TRANSLATIONS += translations/systemd-journal-viewer-de.ts
 
 HEADERS += \
-    src/filelog.h
+    src/journalmodel.h

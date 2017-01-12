@@ -2,12 +2,21 @@
 #define JOURNAL_H
 
 #include <QObject>
+#include <systemd/sd-journal.h>
 
 class Journal : public QObject
 {
     Q_OBJECT
 public:
     explicit Journal(QObject *parent = 0);
+
+public slots:
+    void addMatch(const QString & match);
+    void flushMatches();
+    void skipTail(int size);
+
+private:
+    sd_journal *sdj;
 
 signals:
     void dataReceived(const QVariantMap & data);

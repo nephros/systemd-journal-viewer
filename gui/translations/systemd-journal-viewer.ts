@@ -4,18 +4,14 @@
 <context>
     <name>CoverPage</name>
     <message>
-        <source>My Cover</source>
+        <source>Journal Log</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
-    <name>SecondPage</name>
+    <name>FirstPage</name>
     <message>
-        <source>Nested Page</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Item</source>
+        <source>Journal Viewer</source>
         <translation type="unfinished"></translation>
     </message>
 </context>

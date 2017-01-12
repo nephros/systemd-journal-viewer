@@ -3,7 +3,6 @@
 #include <QDBusConnection>
 #include <QDBusInterface>
 #include <QCoreApplication>
-#include <QDebug>
 #include <QDateTime>
 #include <QThread>
 
@@ -28,6 +27,10 @@ void Adaptor::start()
 
         QObject::connect(m_journal, SIGNAL(dataReceived(QVariantMap)), this, SIGNAL(dataReceived(QVariantMap)));
 
+        QObject::connect(this, SIGNAL(doAddMatch(QString)), m_journal, SLOT(addMatch(QString)), Qt::DirectConnection);
+        QObject::connect(this, SIGNAL(doFlushMatches()), m_journal, SLOT(flushMatches()), Qt::DirectConnection);
+        QObject::connect(this, SIGNAL(doSkipTail(int)), m_journal, SLOT(skipTail(int)), Qt::DirectConnection);
+
         thread->start();
     }
     else {
@@ -43,4 +46,19 @@ void Adaptor::ping()
 void Adaptor::quit()
 {
     qApp->quit();
+}
+
+void Adaptor::addMatch(const QString &match)
+{
+    emit doAddMatch(match);
+}
+
+void Adaptor::flushMatches()
+{
+    emit doFlushMatches();
+}
+
+void Adaptor::skipTail(int size)
+{
+    emit doSkipTail(size);
 }

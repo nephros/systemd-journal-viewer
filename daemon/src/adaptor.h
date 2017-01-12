@@ -21,9 +21,17 @@ private:
 signals:
     Q_SCRIPTABLE void dataReceived(const QVariantMap & data);
 
+    void doAddMatch(const QString & match);
+    void doFlushMatches();
+    void doSkipTail(int size);
+
 public slots:
     Q_SCRIPTABLE void ping();
     Q_SCRIPTABLE void quit();
+
+    Q_SCRIPTABLE void addMatch(const QString & match);
+    Q_SCRIPTABLE void flushMatches();
+    Q_SCRIPTABLE void skipTail(int size);
 };
 
 #endif // ADAPTOR_H

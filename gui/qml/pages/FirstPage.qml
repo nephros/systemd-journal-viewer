@@ -1,53 +1,58 @@
 import QtQuick 2.0
 import Sailfish.Silica 1.0
-import org.nemomobile.dbus 2.0
 import org.omprussia.systemd.journal 1.0
 
 Page {
     id: page
 
+    Component.onCompleted: {
+        journalModel.ping()
+    }
+
     Component.onDestruction: {
-        journal.call("quit", [])
+        journalModel.quit()
     }
 
-    onStatusChanged: {
-        if (status == PageStatus.Active) {
-            journal.call("ping", [])
-        }
-    }
-
-    DBusInterface {
-        id: journal
-        bus: DBus.SessionBus
-        service: "ru.omprussia.systemd.journal"
-        iface: "ru.omprussia.systemd.journal"
-        path: "/"
-        signalsEnabled: true
-
-        function dataReceived(journalData) {
-            listView.model.insert(0, journalData)
-            var logLine = "%1 %2: %3".arg(Qt.formatDateTime(new Date(journalData["__TIMESTAMP"] / 1000), "dd.MM.yy hh:mm:ss.zzz"))
-                                     .arg(journalData["SYSLOG_IDENTIFIER"] + (!!journalData["_PID"] ? ("[" + journalData["_PID"] + "]") : ""))
-                                     .arg((!!journalData["CODE_FILE"] ? (journalData["CODE_FILE"] + ":" + journalData["CODE_FUNC"] + " ") : "")
-                                          + journalData["MESSAGE"])
-            fileLog.writeLine(logLine)
-        }
-    }
-
-    FileLog {
-        id: fileLog
-        fileName: "journal-log-%1".arg(Qt.formatDateTime(new Date(), "ddMMyy-hhmmss-zzz"))
+    JournalModel {
+        id: journalModel
     }
 
     SilicaListView {
         id: listView
-        model: ListModel {}
+        model: journalModel
         anchors.fill: parent
         header: PageHeader {
-            title: fileLog.fileName
+            title: qsTr("Journal Viewer")
         }
         spacing: Theme.paddingSmall
         verticalLayoutDirection: ListView.BottomToTop
+
+        PushUpMenu {
+            MenuItem {
+                text: "Skip tail 100"
+                onClicked: {
+                    journalModel.skipTail(100)
+                }
+            }
+            MenuItem {
+                text: "Add match lipstick"
+                onClicked: {
+                    journalModel.addMatch("_EXE=/usr/bin/lipstick")
+                }
+            }
+            MenuItem {
+                text: "Flush matches"
+                onClicked: {
+                    journalModel.flushMatches()
+                }
+            }
+            MenuItem {
+                text: "Save"
+                onClicked: {
+                    journalModel.save("/home/nemo")
+                }
+            }
+        }
 
         delegate: BackgroundItem {
             id: delegate
