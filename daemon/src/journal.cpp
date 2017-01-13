@@ -3,15 +3,8 @@
 #include <QVariantMap>
 #include <stdio.h>
 
-#define JOURNAL_FOREACH_DATA_RETVAL(j, data, l, retval)                     \
-        for (sd_journal_restart_data(j); ((retval) = sd_journal_enumerate_data((j), &(data), &(l))) > 0; )
-
-int get_tail(sd_journal *j)
-{
-    if (sd_journal_seek_tail(j) < 0)
-        return -1;
-    return sd_journal_previous(j);
-}
+#define JOURNAL_FOREACH_DATA_RETVAL(j, data, l, retval) \
+    for (sd_journal_restart_data(j); ((retval) = sd_journal_enumerate_data((j), &(data), &(l))) > 0; )
 
 Journal::Journal(QObject *parent) : QObject(parent)
 {
@@ -21,7 +14,7 @@ Journal::Journal(QObject *parent) : QObject(parent)
 void Journal::addMatch(const QString &match)
 {
     if (sdj) {
-        sd_journal_add_match(sdj, match.toLatin1().constData(), 0);
+        sd_journal_add_match(sdj, match.toUtf8().constData(), 0);
     }
 }
 
@@ -36,8 +29,19 @@ void Journal::skipTail(int size)
 {
     if (sdj) {
         if (sd_journal_seek_tail(sdj) == 0) {
-            sd_journal_previous_skip(sdj, (uint64_t)size);
+            if (size <= 0) {
+                sd_journal_previous(sdj);
+            } else {
+                sd_journal_previous_skip(sdj, (uint64_t)size);
+            }
         }
+    }
+}
+
+void Journal::seekTimestamp(uint64_t timestamp)
+{
+    if (sdj) {
+        sd_journal_seek_realtime_usec(sdj, timestamp * 1000);
     }
 }
 
@@ -54,11 +58,7 @@ void Journal::init()
         return;
     }
 
-    if (get_tail(sdj) < 0) {
-        perror("Cannot obtain journal tail");
-        emit quit();
-        return;
-    }
+    skipTail(50);
 
     for (;;) {
         int next_ret;
@@ -79,24 +79,23 @@ void Journal::init()
             }
 
             uint64_t realtime;
-            if (sd_journal_get_realtime_usec(sdj, &realtime) == 0) {
-                jsonData["__TIMESTAMP"] = realtime;
+            if (sd_journal_get_realtime_usec(sdj, &realtime) < 0) {
+                break;
             }
+
+            jsonData["__TIMESTAMP"] = realtime / 1000;
 
             emit dataReceived(jsonData);
         } else if (next_ret == 0) {
             if (sd_journal_wait(sdj, (uint64_t)-1) < 0) {
-                emit quit();
-                return;
+                break;
             }
         } else if (next_ret < 0) {
-            emit quit();
-            return;
+            break;
         }
     }
 
     sd_journal_close(sdj);
 
     emit quit();
-    return;
 }

@@ -29,25 +29,13 @@ Page {
 
         PushUpMenu {
             MenuItem {
-                text: "Skip tail 100"
+                text: qsTranslate("", "Options")
                 onClicked: {
-                    journalModel.skipTail(100)
+                    pageStack.push(Qt.resolvedUrl("OptionsPage.qml"), {journalModel: journalModel})
                 }
             }
             MenuItem {
-                text: "Add match lipstick"
-                onClicked: {
-                    journalModel.addMatch("_EXE=/usr/bin/lipstick")
-                }
-            }
-            MenuItem {
-                text: "Flush matches"
-                onClicked: {
-                    journalModel.flushMatches()
-                }
-            }
-            MenuItem {
-                text: "Save"
+                text: qsTranslate("", "Save")
                 onClicked: {
                     journalModel.save("/home/nemo")
                 }

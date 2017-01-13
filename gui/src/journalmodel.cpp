@@ -55,7 +55,7 @@ void JournalModel::save(const QString &filePath)
     if (file.open(QFile::WriteOnly | QFile::Text)) {
         QTextStream out(&file);
         foreach (const QVariantMap & data, m_modelData) {
-            QString logLine = QString("%1 %2: %3%4").arg(QDateTime::fromMSecsSinceEpoch(data["__TIMESTAMP"].toULongLong() / 1000).toString("dd.MM.yy hh:mm:ss.zzz"))
+            QString logLine = QString("%1 %2: %3%4").arg(QDateTime::fromMSecsSinceEpoch(data["__TIMESTAMP"].toULongLong()).toString("dd.MM.yy hh:mm:ss.zzz"))
                                                     .arg(data.contains("_PID") ? QString("%1[%2]").arg(data["SYSLOG_IDENTIFIER"].toString()).arg(data["_PID"].toString())
                                                                                : data["SYSLOG_IDENTIFIER"].toString())
                                                     .arg(data.contains("CODE_FILE") ? QString("%1:%2").arg(data["CODE_FILE"].toString()).arg(data["CODE_LINE"].toString())

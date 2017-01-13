@@ -19,3 +19,6 @@ TRANSLATIONS += translations/systemd-journal-viewer-de.ts
 
 HEADERS += \
     src/journalmodel.h
+
+DISTFILES += \
+    qml/pages/OptionsPage.qml
