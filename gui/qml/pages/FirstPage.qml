@@ -6,7 +6,7 @@ Page {
     id: page
 
     onStatusChanged: {
-        if (status === PageStatus.Active && pageStack.depth === 1) {
+        if (status === PageStatus.Active && pageStack.depth === 1 && !forwardNavigation) {
             pageStack.pushAttached("OptionsPage.qml", {
                                        journalModel: journalModel,
                                        acceptDestination: page,
@@ -50,7 +50,7 @@ Page {
 
         PushUpMenu {
             MenuItem {
-                text: qsTranslate("", "Save log to file")
+                text: qsTr("Save log to file")
                 onClicked: {
                     var dialog = pageStack.push(Qt.resolvedUrl("FileBrowser.qml"), {
                                                     acceptDestination: page,

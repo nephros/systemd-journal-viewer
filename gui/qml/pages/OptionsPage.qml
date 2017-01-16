@@ -217,7 +217,7 @@ Dialog {
                     enabled: journalModel
                     onClicked: {
                         journalModel.clear()
-                        pageStack.pop()
+                        pageStack.navigateBack()
                     }
                 }
             }

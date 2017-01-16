@@ -2,13 +2,6 @@
 <!DOCTYPE TS>
 <TS version="2.1">
 <context>
-    <name></name>
-    <message>
-        <source>Save log to file</source>
-        <translation type="unfinished"></translation>
-    </message>
-</context>
-<context>
     <name>CoverPage</name>
     <message>
         <source>Journal Log</source>
@@ -38,6 +31,10 @@
     </message>
     <message>
         <source>Log saved to %1</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Save log to file</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
