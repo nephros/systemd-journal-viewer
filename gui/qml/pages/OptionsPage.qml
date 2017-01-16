@@ -10,11 +10,15 @@ Dialog {
         id: matchModel
     }
 
-    canAccept: !!journalModel
+    canAccept: journalModel
 
     onAccepted: {
         journalModel.flushMatches()
-        journalModel.skipTail(parseInt(lastNumber.text))
+        if (lastMessages.currentIndex = 0) {
+            journalModel.skipTail(parseInt(lastNumber.text))
+        } else {
+            journalModel.seekTimestamp(sinceDate.selectedDate.getTime())
+        }
         if (matchModel.count > 0) {
             for (var i = 0; i < matchModel.count; i++) {
                 var matchItem = matchModel.get(i)
@@ -36,6 +40,27 @@ Dialog {
                 acceptText: qsTr("Apply changes")
             }
 
+            ComboBox {
+                id: lastMessages
+                label: qsTr("Load previous messages")
+                menu: ContextMenu {
+                    MenuItem {
+                        text: qsTr("N last messages")
+                        onClicked: {
+                            lastNumber.visible = true
+                            sinceDate.visible = false
+                        }
+                    }
+                    MenuItem {
+                        text: qsTr("Messages since date")
+                        onClicked: {
+                            lastNumber.visible = false
+                            sinceDate.visible = true
+                        }
+                    }
+                }
+            }
+
             TextField {
                 id: lastNumber
                 width: parent.width
@@ -43,7 +68,18 @@ Dialog {
                 validator: IntValidator { bottom: 0; top: 9999 }
                 text: "50"
                 placeholderText: "50"
-                label: qsTr("Load last messages")
+                label: qsTr("Load N last messages")
+            }
+
+            ValueButton {
+                id: sinceDate
+                label: qsTr("Select date and time")
+                property date selectedDate: new Date()
+                value: Qt.formatDateTime(selectedDate, "dd-MM-yyyy hh:mm:ss")
+                visible: false
+                onClicked: {
+                    pageStack.push(datePickerComponent, { date: sinceDate.selectedDate })
+                }
             }
 
             Repeater {
@@ -51,7 +87,9 @@ Dialog {
                 delegate: Component {
                     ListItem {
                         id: delegate
-                        width: parent.width
+                        anchors.left: parent.left
+                        anchors.right: parent.right
+                        anchors.margins: Theme.horizontalPageMargin
                         menu: ContextMenu {
                             MenuItem {
                                 text: qsTr("Remove")
@@ -96,7 +134,11 @@ Dialog {
             }
 
             ComboBox {
+                id: newMatchFilter
                 label: qsTr("Add match filter")
+                currentIndex: -1
+                property string defaultValue: qsTr("Click to add match filter")
+                value: (currentItem !== null && currentItem.text !== defaultValue) ? currentItem.text : defaultValue
                 menu: ContextMenu {
                     MenuItem {
                         text: qsTr("Syslog identifier")
@@ -106,7 +148,7 @@ Dialog {
                         }
                     }
                     MenuItem {
-                        text: qsTr("Executable name")
+                        text: qsTr("Executable path")
                         onClicked: {
                             newMatchRule.extraKey = "_EXE"
                             newMatchRule.visible = true
@@ -132,10 +174,12 @@ Dialog {
             TextField {
                 id: newMatchRule
                 width: parent.width
-                placeholderText: "match value"
                 enabled: journalModel
                 property string extraKey
                 visible: false
+                placeholderText: label
+                inputMethodHints: Qt.ImhNoAutoUppercase
+                label: newMatchFilter.currentItem ? newMatchFilter.currentItem.text : ""
                 EnterKey.onClicked: {
                     if (extraKey) {
                         matchModel.append({matchKey: extraKey, matchValue: text})
@@ -150,31 +194,66 @@ Dialog {
                     }
                     text = ""
                     visible = false
+                    newMatchFilter.currentIndex = -1
                 }
             }
 
-            Button {
+            Row {
                 anchors.horizontalCenter: parent.horizontalCenter
-                text: qsTr("Clear matches")
-                enabled: !!journalModel
-                visible: matchModel.count > 0
-                onClicked: {
-                    journalModel.flushMatches()
-                    matchModel.clear()
-                }
-            }
+                spacing: Theme.paddingMedium
 
-            Button {
-                anchors.horizontalCenter: parent.horizontalCenter
-                text: qsTr("Clear log")
-                enabled: !!journalModel
-                onClicked: {
-                    journalModel.clear()
-                    pageStack.pop()
+                Button {
+                    text: qsTr("Clear matches")
+                    enabled: journalModel
+                    visible: matchModel.count > 0
+                    onClicked: {
+                        journalModel.flushMatches()
+                        matchModel.clear()
+                    }
+                }
+
+                Button {
+                    text: qsTr("Clear log")
+                    enabled: journalModel
+                    onClicked: {
+                        journalModel.clear()
+                        pageStack.pop()
+                    }
                 }
             }
         }
 
         VerticalScrollDecorator {}
+    }
+
+
+
+    Component {
+        id: datePickerComponent
+        DatePickerDialog {
+            acceptDestination: timePickerComponent
+            acceptDestinationProperties: {
+                "time": date,
+                "hour": date.getHours(),
+                "minute": date.getMinutes()
+            }
+            acceptDestinationAction: PageStackAction.Replace
+        }
+    }
+
+    Component {
+        id: timePickerComponent
+        TimePickerDialog {
+            hourMode: DateTime.TwentyFourHours
+
+            onAccepted: {
+                var result = time
+                result.setHours(hour)
+                result.setMinutes(minute)
+                result.setMinutes(0)
+                result.setMilliseconds(0)
+                sinceDate.selectedDate = result
+            }
+        }
     }
 }

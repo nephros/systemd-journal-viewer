@@ -5,6 +5,16 @@ import org.omprussia.systemd.journal 1.0
 Page {
     id: page
 
+    onStatusChanged: {
+        if (status === PageStatus.Active && pageStack.depth === 1) {
+            pageStack.pushAttached("OptionsPage.qml", {
+                                       journalModel: journalModel,
+                                       acceptDestination: page,
+                                       acceptDestinationAction: PageStackAction.Pop
+                                   });
+        }
+    }
+
     Component.onCompleted: {
         journalModel.ping()
     }
@@ -21,31 +31,54 @@ Page {
         id: listView
         model: journalModel
         anchors.fill: parent
+        property string currentTitle: qsTr("Journal Viewer")
+        property string alternateTitle
         header: PageHeader {
-            title: qsTr("Journal Viewer")
+            title: listView.alternateTitle ? listView.alternateTitle : listView.currentTitle
         }
         spacing: Theme.paddingSmall
         verticalLayoutDirection: ListView.BottomToTop
 
+        Timer {
+            id: alternateTimer
+            interval: 3000
+            repeat: false
+            onTriggered: {
+                listView.alternateTitle = ""
+            }
+        }
+
         PushUpMenu {
             MenuItem {
-                text: qsTranslate("", "Options")
+                text: qsTranslate("", "Save log to file")
                 onClicked: {
-                    pageStack.push(Qt.resolvedUrl("OptionsPage.qml"), {journalModel: journalModel})
-                }
-            }
-            MenuItem {
-                text: qsTranslate("", "Save")
-                onClicked: {
-                    journalModel.save("/home/nemo")
+                    var dialog = pageStack.push(Qt.resolvedUrl("FileBrowser.qml"), {
+                                                    acceptDestination: page,
+                                                    acceptDestinationAction: PageStackAction.Pop,
+                                                    callback: function(path) {
+                                                        listView.alternateTitle = qsTr("Log saved to %1").arg(path)
+                                                        alternateTimer.start()
+                                                        journalModel.save(path)
+                                                    }
+                                                })
                 }
             }
         }
 
-        delegate: BackgroundItem {
+        delegate: ListItem {
             id: delegate
             contentHeight: journalColumn.height
-            height: journalColumn.height
+
+            menu: ContextMenu {
+                MenuLabel {
+                    text: Qt.formatDateTime(new Date(model["__TIMESTAMP"]), "dd.MM.yy hh:mm:ss.zzz")                }
+                MenuItem {
+                    text: qsTr("Copy to clipboard")
+                    onClicked: {
+                        journalModel.copyItem(index)
+                    }
+                }
+            }
 
             Column {
                 id: journalColumn

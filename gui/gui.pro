@@ -21,4 +21,5 @@ HEADERS += \
     src/journalmodel.h
 
 DISTFILES += \
-    qml/pages/OptionsPage.qml
+    qml/pages/OptionsPage.qml \
+    qml/pages/FileBrowser.qml

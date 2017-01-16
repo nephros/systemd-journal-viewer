@@ -38,10 +38,10 @@ void Journal::skipTail(int size)
     }
 }
 
-void Journal::seekTimestamp(uint64_t timestamp)
+void Journal::seekTimestamp(quint64 timestamp)
 {
     if (sdj) {
-        sd_journal_seek_realtime_usec(sdj, timestamp * 1000);
+        sd_journal_seek_realtime_usec(sdj, (uint64_t)timestamp * 1000);
     }
 }
 

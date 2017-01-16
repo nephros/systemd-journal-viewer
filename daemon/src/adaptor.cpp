@@ -30,6 +30,7 @@ void Adaptor::start()
         QObject::connect(this, SIGNAL(doAddMatch(QString)), m_journal, SLOT(addMatch(QString)), Qt::DirectConnection);
         QObject::connect(this, SIGNAL(doFlushMatches()), m_journal, SLOT(flushMatches()), Qt::DirectConnection);
         QObject::connect(this, SIGNAL(doSkipTail(int)), m_journal, SLOT(skipTail(int)), Qt::DirectConnection);
+        QObject::connect(this, SIGNAL(doSeekTimestamp(quint64)), m_journal, SLOT(seekTimestamp(quint64)), Qt::DirectConnection);
 
         thread->start();
     }
@@ -61,4 +62,9 @@ void Adaptor::flushMatches()
 void Adaptor::skipTail(int size)
 {
     emit doSkipTail(size);
+}
+
+void Adaptor::seekTimestamp(quint64 timestamp)
+{
+    emit doSeekTimestamp(timestamp);
 }

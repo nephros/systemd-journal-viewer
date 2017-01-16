@@ -1,12 +1,14 @@
 #include "journalmodel.h"
 
+#include <QGuiApplication>
+#include <QClipboard>
 #include <QDebug>
 
 JournalModel::JournalModel(QObject *parent):
     QAbstractListModel(parent)
 {
     m_iface = new QDBusInterface("ru.omprussia.systemd.journal", "/", "ru.omprussia.systemd.journal", QDBusConnection::sessionBus(), this);
-    qDebug() << "connect bus signal:" << QDBusConnection::sessionBus().connect("ru.omprussia.systemd.journal", "/", "ru.omprussia.systemd.journal", "dataReceived", this, SLOT(onDataReceived(QVariantMap)));
+    QDBusConnection::sessionBus().connect("ru.omprussia.systemd.journal", "/", "ru.omprussia.systemd.journal", "dataReceived", this, SLOT(onDataReceived(QVariantMap)));
 }
 
 int JournalModel::rowCount(const QModelIndex &parent) const
@@ -25,10 +27,14 @@ QVariant JournalModel::data(const QModelIndex &index, int role) const
 
 void JournalModel::skipTail(int count)
 {
-    beginResetModel();
     m_iface->call(QDBus::NoBlock, "skipTail", count);
-    m_modelData.clear();
-    endResetModel();
+    clear();
+}
+
+void JournalModel::seekTimestamp(quint64 timestamp)
+{
+    m_iface->call(QDBus::NoBlock, "seekTimestamp", timestamp);
+    clear();
 }
 
 void JournalModel::addMatch(const QString &match)
@@ -39,6 +45,15 @@ void JournalModel::addMatch(const QString &match)
 void JournalModel::flushMatches()
 {
     m_iface->call(QDBus::NoBlock, "flushMatches");
+}
+
+void JournalModel::copyItem(int index)
+{
+    if (index < 0 || index >= m_modelData.count()) {
+        return;
+    }
+
+    qGuiApp->clipboard()->setText(logItem(m_modelData[index]));
 }
 
 void JournalModel::clear()
@@ -55,13 +70,7 @@ void JournalModel::save(const QString &filePath)
     if (file.open(QFile::WriteOnly | QFile::Text)) {
         QTextStream out(&file);
         foreach (const QVariantMap & data, m_modelData) {
-            QString logLine = QString("%1 %2: %3%4").arg(QDateTime::fromMSecsSinceEpoch(data["__TIMESTAMP"].toULongLong()).toString("dd.MM.yy hh:mm:ss.zzz"))
-                                                    .arg(data.contains("_PID") ? QString("%1[%2]").arg(data["SYSLOG_IDENTIFIER"].toString()).arg(data["_PID"].toString())
-                                                                               : data["SYSLOG_IDENTIFIER"].toString())
-                                                    .arg(data.contains("CODE_FILE") ? QString("%1:%2").arg(data["CODE_FILE"].toString()).arg(data["CODE_LINE"].toString())
-                                                                                    : QString())
-                                                    .arg(data["MESSAGE"].toString());
-            out << logLine << endl;
+            out << logItem(data) << endl;
         }
         file.close();
     }
@@ -88,4 +97,14 @@ void JournalModel::onDataReceived(const QVariantMap &data)
     beginInsertRows(QModelIndex(), 0, 0);
     m_modelData.append(data);
     endInsertRows();
+}
+
+QString JournalModel::logItem(const QVariantMap & data)
+{
+    return QString("%1 %2: %3%4").arg(QDateTime::fromMSecsSinceEpoch(data["__TIMESTAMP"].toULongLong()).toString("dd.MM.yy hh:mm:ss.zzz"))
+                                 .arg(data.contains("_PID") ? QString("%1[%2]").arg(data["SYSLOG_IDENTIFIER"].toString()).arg(data["_PID"].toString())
+                                                            : data["SYSLOG_IDENTIFIER"].toString())
+                                 .arg(data.contains("CODE_FILE") ? QString("%1:%2").arg(data["CODE_FILE"].toString()).arg(data["CODE_LINE"].toString())
+                                                                 : QString())
+                                 .arg(data["MESSAGE"].toString());
 }

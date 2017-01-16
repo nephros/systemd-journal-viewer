@@ -24,6 +24,7 @@ signals:
     void doAddMatch(const QString & match);
     void doFlushMatches();
     void doSkipTail(int size);
+    void doSeekTimestamp(quint64 timestamp);
 
 public slots:
     Q_SCRIPTABLE void ping();
@@ -32,6 +33,7 @@ public slots:
     Q_SCRIPTABLE void addMatch(const QString & match);
     Q_SCRIPTABLE void flushMatches();
     Q_SCRIPTABLE void skipTail(int size);
+    Q_SCRIPTABLE void seekTimestamp(quint64 timestamp);
 };
 
 #endif // ADAPTOR_H

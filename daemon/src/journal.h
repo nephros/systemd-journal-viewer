@@ -14,7 +14,7 @@ public slots:
     void addMatch(const QString & match);
     void flushMatches();
     void skipTail(int size);
-    void seekTimestamp(uint64_t timestamp);
+    void seekTimestamp(quint64 timestamp);
 
 private:
     sd_journal *sdj;

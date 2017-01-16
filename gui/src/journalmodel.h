@@ -15,21 +15,26 @@ public:
     QVariant data(const QModelIndex &index, int role = Qt::DisplayRole) const;
     QHash<int, QByteArray> roleNames() const { return m_roles; }
 
-    Q_INVOKABLE void skipTail(int count);
-    Q_INVOKABLE void addMatch(const QString & match);
-    Q_INVOKABLE void flushMatches();
+public slots:
+    void skipTail(int count);
+    void seekTimestamp(quint64 timestamp);
+    void addMatch(const QString & match);
+    void flushMatches();
 
-    Q_INVOKABLE void clear();
+    void copyItem(int index);
+    void clear();
 
-    Q_INVOKABLE void save(const QString & filePath);
+    void save(const QString & filePath);
 
-    Q_INVOKABLE void ping();
-    Q_INVOKABLE void quit();
+    void ping();
+    void quit();
 
 private slots:
     void onDataReceived(const QVariantMap & data);
 
 private:
+    QString logItem(const QVariantMap &data);
+
     QStringList m_keys;
     QHash<int, QByteArray> m_roles;
     QList<QVariantMap> m_modelData;
