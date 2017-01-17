@@ -34,10 +34,12 @@ Dialog {
         Column {
             id: content
             width: parent.width
+            spacing: Theme.paddingSmall
 
             DialogHeader {
                 title: qsTr("Options")
                 acceptText: qsTr("Apply changes")
+                cancelText: qsTr("Cancel")
             }
 
             ComboBox {
@@ -74,7 +76,15 @@ Dialog {
             ValueButton {
                 id: sinceDate
                 label: qsTr("Select date and time")
-                property date selectedDate: new Date()
+                property var selectedDate: new Date()
+                function setDate(value) {
+                    selectedDate = value
+                }
+                function setTime(hour, minute) {
+                    selectedDate.setHours(hour)
+                    selectedDate.setMinutes(minute)
+                    selectedDateChanged()
+                }
                 value: Qt.formatDateTime(selectedDate, "dd-MM-yyyy hh:mm:ss")
                 visible: false
                 onClicked: {
@@ -142,31 +152,19 @@ Dialog {
                 menu: ContextMenu {
                     MenuItem {
                         text: qsTr("Syslog identifier")
-                        onClicked: {
-                            newMatchRule.extraKey = "SYSLOG_IDENTIFIER"
-                            newMatchRule.visible = true
-                        }
+                        property string identifier: "SYSLOG_IDENTIFIER"
                     }
                     MenuItem {
                         text: qsTr("Executable path")
-                        onClicked: {
-                            newMatchRule.extraKey = "_EXE"
-                            newMatchRule.visible = true
-                        }
+                        property string identifier: "_EXE"
                     }
                     MenuItem {
                         text: qsTr("Exact message")
-                        onClicked: {
-                            newMatchRule.extraKey = "MESSAGE"
-                            newMatchRule.visible = true
-                        }
+                        property string identifier: "MESSAGE"
                     }
                     MenuItem {
                         text: qsTr("Custom match rule")
-                        onClicked: {
-                            newMatchRule.extraKey = ""
-                            newMatchRule.visible = true
-                        }
+                        property string identifier: ""
                     }
                 }
             }
@@ -175,15 +173,23 @@ Dialog {
                 id: newMatchRule
                 width: parent.width
                 enabled: journalModel
-                property string extraKey
-                visible: false
+                visible: newMatchFilter.currentIndex >= 0
                 placeholderText: label
                 inputMethodHints: Qt.ImhNoAutoUppercase
                 label: newMatchFilter.currentItem ? newMatchFilter.currentItem.text : ""
+                onFocusChanged: {
+                    if (!focus) {
+                        newMatchRule.reset()
+                    }
+                }
+                onVisibleChanged: {
+                    if (visible) {
+                        forceActiveFocus()
+                    }
+                }
                 EnterKey.onClicked: {
-                    if (extraKey) {
-                        matchModel.append({matchKey: extraKey, matchValue: text})
-                        extraKey = ""
+                    if (newMatchFilter.currentItem.identifier) {
+                        matchModel.append({matchKey: newMatchFilter.currentItem.identifier, matchValue: text})
                     } else {
                         var keyIndex = text.indexOf("=")
                         if (keyIndex > 0) {
@@ -192,8 +198,10 @@ Dialog {
                         }
                         matchModel.append({matchKey: matchKey, matchValue: matchValue})
                     }
+                    newMatchRule.reset()
+                }
+                function reset() {
                     text = ""
-                    visible = false
                     newMatchFilter.currentIndex = -1
                 }
             }
@@ -226,33 +234,28 @@ Dialog {
         VerticalScrollDecorator {}
     }
 
-
-
     Component {
         id: datePickerComponent
         DatePickerDialog {
             acceptDestination: timePickerComponent
-            acceptDestinationProperties: {
-                "time": date,
-                "hour": date.getHours(),
-                "minute": date.getMinutes()
-            }
             acceptDestinationAction: PageStackAction.Replace
+            onAccepted: {
+                sinceDate.setDate(selectedDate)
+            }
+            onRejected: {
+                sinceDate.setDate(new Date())
+            }
         }
     }
 
     Component {
         id: timePickerComponent
         TimePickerDialog {
+            hour: sinceDate.selectedDate.getHours()
+            minute: sinceDate.selectedDate.getMinutes()
             hourMode: DateTime.TwentyFourHours
-
             onAccepted: {
-                var result = time
-                result.setHours(hour)
-                result.setMinutes(minute)
-                result.setMinutes(0)
-                result.setMilliseconds(0)
-                sinceDate.selectedDate = result
+                sinceDate.setTime(hour, minute)
             }
         }
     }
