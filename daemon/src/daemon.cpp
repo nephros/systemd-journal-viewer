@@ -12,9 +12,9 @@ int main(int argc, char *argv[])
 
     qputenv("DBUS_SESSION_BUS_ADDRESS", "unix:path=/run/user/100000/dbus/user_bus_socket");
 
-    QScopedPointer<QCoreApplication> application(new QCoreApplication(argc, argv));
-    QScopedPointer<Adaptor> dbus(new Adaptor());
-    QTimer::singleShot(1, dbus.data(), SLOT(start()));
+    QCoreApplication application(argc, argv);
+    Adaptor dbus;
+    QTimer::singleShot(1, &dbus, &Adaptor::start);
 
-    return application->exec();
+    return application.exec();
 }

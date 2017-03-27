@@ -21,16 +21,16 @@ void Adaptor::start()
         QThread *thread = new QThread(this);
         thread->setObjectName(QString("journalThread-%1").arg(QDateTime::currentMSecsSinceEpoch()));
         m_journal->moveToThread(thread);
-        QObject::connect(thread, SIGNAL(started()), m_journal, SLOT(init()));
-        QObject::connect(m_journal, SIGNAL(destroyed()), thread, SLOT(quit()));
-        QObject::connect(m_journal, SIGNAL(quit()), this, SLOT(quit()));
+        connect(thread, &QThread::started, m_journal, &Journal::init);
+        connect(m_journal, &Journal::destroyed, thread, &QThread::quit);
+        connect(m_journal, &Journal::quit, this, &Adaptor::quit);
 
-        QObject::connect(m_journal, SIGNAL(dataReceived(QVariantMap)), this, SIGNAL(dataReceived(QVariantMap)));
+        connect(m_journal, &Journal::dataReceived, this, &Adaptor::dataReceived);
 
-        QObject::connect(this, SIGNAL(doAddMatch(QString)), m_journal, SLOT(addMatch(QString)), Qt::DirectConnection);
-        QObject::connect(this, SIGNAL(doFlushMatches()), m_journal, SLOT(flushMatches()), Qt::DirectConnection);
-        QObject::connect(this, SIGNAL(doSkipTail(int)), m_journal, SLOT(skipTail(int)), Qt::DirectConnection);
-        QObject::connect(this, SIGNAL(doSeekTimestamp(quint64)), m_journal, SLOT(seekTimestamp(quint64)), Qt::DirectConnection);
+        connect(this, &Adaptor::doAddMatch, m_journal, &Journal::addMatch, Qt::DirectConnection);
+        connect(this, &Adaptor::doFlushMatches, m_journal, &Journal::flushMatches, Qt::DirectConnection);
+        connect(this, &Adaptor::doSkipTail, m_journal, &Journal::skipTail, Qt::DirectConnection);
+        connect(this, &Adaptor::doSeekTimestamp, m_journal, &Journal::seekTimestamp, Qt::DirectConnection);
 
         thread->start();
     }

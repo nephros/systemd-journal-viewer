@@ -11,8 +11,8 @@ class JournalModel : public QAbstractListModel
 public:
     explicit JournalModel(QObject *parent = 0);
 
-    int rowCount(const QModelIndex &parent = QModelIndex()) const;
-    QVariant data(const QModelIndex &index, int role = Qt::DisplayRole) const;
+    int rowCount(const QModelIndex &) const;
+    QVariant data(const QModelIndex &index, int role) const;
     QHash<int, QByteArray> roleNames() const { return m_roles; }
 
 public slots:

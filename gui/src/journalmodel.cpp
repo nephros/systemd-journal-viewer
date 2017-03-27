@@ -11,9 +11,8 @@ JournalModel::JournalModel(QObject *parent):
     QDBusConnection::sessionBus().connect("ru.omprussia.systemd.journal", "/", "ru.omprussia.systemd.journal", "dataReceived", this, SLOT(onDataReceived(QVariantMap)));
 }
 
-int JournalModel::rowCount(const QModelIndex &parent) const
+int JournalModel::rowCount(const QModelIndex &) const
 {
-    Q_UNUSED(parent)
     return m_modelData.count();
 }
 
