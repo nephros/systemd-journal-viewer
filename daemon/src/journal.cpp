@@ -1,6 +1,7 @@
 #include "journal.h"
 
 #include <QVariantMap>
+#include <QDebug>
 #include <stdio.h>
 
 #define JOURNAL_FOREACH_DATA_RETVAL(j, data, l, retval) \
@@ -13,6 +14,7 @@ Journal::Journal(QObject *parent) : QObject(parent)
 
 void Journal::addMatch(const QString &match)
 {
+    qDebug() << match << sdj;
     if (sdj) {
         sd_journal_add_match(sdj, match.toUtf8().constData(), 0);
     }
@@ -20,6 +22,7 @@ void Journal::addMatch(const QString &match)
 
 void Journal::flushMatches()
 {
+    qDebug() << sdj;
     if (sdj) {
         sd_journal_flush_matches(sdj);
     }
@@ -27,6 +30,7 @@ void Journal::flushMatches()
 
 void Journal::skipTail(int size)
 {
+    qDebug() << size << sdj;
     if (sdj) {
         if (sd_journal_seek_tail(sdj) == 0) {
             if (size <= 0) {
@@ -40,6 +44,7 @@ void Journal::skipTail(int size)
 
 void Journal::seekTimestamp(quint64 timestamp)
 {
+    qDebug() << timestamp << sdj;
     if (sdj) {
         sd_journal_seek_realtime_usec(sdj, (uint64_t)timestamp * 1000);
     }

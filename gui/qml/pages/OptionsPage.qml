@@ -14,7 +14,7 @@ Dialog {
 
     onAccepted: {
         journalModel.flushMatches()
-        if (lastMessages.currentIndex = 0) {
+        if (lastMessages.currentIndex == 0) {
             journalModel.skipTail(parseInt(lastNumber.text))
         } else {
             journalModel.seekTimestamp(sinceDate.selectedDate.getTime())

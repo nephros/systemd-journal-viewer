@@ -5,6 +5,7 @@
 #include <QCoreApplication>
 #include <QDateTime>
 #include <QThread>
+#include <QDebug>
 
 Adaptor::Adaptor(QObject *parent) : QObject(parent)
 {
@@ -51,20 +52,24 @@ void Adaptor::quit()
 
 void Adaptor::addMatch(const QString &match)
 {
+    qDebug() << match;
     emit doAddMatch(match);
 }
 
 void Adaptor::flushMatches()
 {
+    qDebug();
     emit doFlushMatches();
 }
 
 void Adaptor::skipTail(int size)
 {
+    qDebug() << size;
     emit doSkipTail(size);
 }
 
 void Adaptor::seekTimestamp(quint64 timestamp)
 {
+    qDebug() << timestamp;
     emit doSeekTimestamp(timestamp);
 }
