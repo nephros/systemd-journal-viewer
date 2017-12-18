@@ -14,16 +14,16 @@ Dialog {
 
     onAccepted: {
         journalModel.flushMatches()
-        if (lastMessages.currentIndex == 0) {
-            journalModel.skipTail(parseInt(lastNumber.text))
-        } else {
-            journalModel.seekTimestamp(sinceDate.selectedDate.getTime())
-        }
         if (matchModel.count > 0) {
             for (var i = 0; i < matchModel.count; i++) {
                 var matchItem = matchModel.get(i)
                 journalModel.addMatch("%1=%2".arg(matchItem.matchKey).arg(matchItem.matchValue))
             }
+        }
+        if (lastMessages.currentIndex == 0) {
+            journalModel.skipTail(parseInt(lastNumber.text))
+        } else {
+            journalModel.seekTimestamp(sinceDate.selectedDate.getTime())
         }
     }
 

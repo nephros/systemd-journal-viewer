@@ -14,7 +14,7 @@ int main(int argc, char *argv[])
 
     QCoreApplication application(argc, argv);
     Adaptor dbus;
-    QTimer::singleShot(1, &dbus, &Adaptor::start);
+    QTimer::singleShot(0, &dbus, &Adaptor::start);
 
     return application.exec();
 }

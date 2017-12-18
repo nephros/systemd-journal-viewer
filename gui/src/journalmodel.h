@@ -30,10 +30,11 @@ public slots:
     void quit();
 
 private slots:
-    void onDataReceived(const QVariantMap & data);
+    void onDataReceived(const QVariantList &data);
 
 private:
     QString logItem(const QVariantMap &data);
+    QVariant unwind(const QVariant &val, int depth = 0);
 
     QStringList m_keys;
     QHash<int, QByteArray> m_roles;

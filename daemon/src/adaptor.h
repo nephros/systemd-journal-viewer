@@ -19,7 +19,7 @@ private:
     Journal *m_journal;
 
 signals:
-    Q_SCRIPTABLE void dataReceived(const QVariantMap & data);
+    Q_SCRIPTABLE void dataReceived(const QVariantList & data);
 
     void doAddMatch(const QString & match);
     void doFlushMatches();
