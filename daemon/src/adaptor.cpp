@@ -6,8 +6,16 @@
 #include <QDateTime>
 #include <QThread>
 #include <QDebug>
+#include <QFile>
+#include <QDir>
 
-Adaptor::Adaptor(QObject *parent) : QObject(parent)
+#include <sys/stat.h>
+#include <unistd.h>
+#include <grp.h>
+#include <pwd.h>
+
+Adaptor::Adaptor(QObject *parent)
+    : QObject(parent)
 {
 
 }
@@ -66,4 +74,39 @@ void Adaptor::seekTimestamp(quint64 timestamp)
 {
     qDebug() << Q_FUNC_INFO << timestamp;
     emit doSeekTimestamp(timestamp);
+}
+
+void Adaptor::saveJournal(const QString &filename)
+{
+    qDebug() << Q_FUNC_INFO << filename;
+    QDir journalDir(QStringLiteral("/var/log/journal"));
+    if (!journalDir.exists()) {
+        qWarning() << "Directory does not exist" << journalDir.absolutePath();
+        return;
+    }
+    qDebug() << journalDir.absolutePath();
+    QStringList folders = journalDir.entryList(QDir::Dirs | QDir::NoDotAndDotDot);
+    if (folders.isEmpty()) {
+        qWarning() << "Directory does not contain journal subdir" << journalDir.absolutePath();
+        return;
+    }
+    qDebug() << folders.first();
+    journalDir.cd(folders.first());
+    qDebug() << journalDir.absolutePath();
+    QString journalFileName = journalDir.absoluteFilePath(QStringLiteral("system.journal"));
+    if (!QFileInfo::exists(journalFileName)) {
+        qWarning() << "Directory does not contain system journal" << journalFileName;
+        return;
+    }
+
+    if (!QFile::copy(journalFileName, filename)) {
+        qWarning() << "Journal save failed" << filename;
+        return;
+    }
+
+    const struct group *nemoGroup = getgrnam("nemo");
+    const struct passwd *nemoPasswd = getpwnam("nemo");
+
+    chown(filename.toLatin1().constData(), nemoPasswd->pw_uid, nemoGroup->gr_gid);
+    chmod(filename.toLatin1().constData(), 0644);
 }

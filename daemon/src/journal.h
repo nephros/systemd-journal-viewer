@@ -42,7 +42,7 @@ class Journal : public QObject
 {
     Q_OBJECT
 public:
-    explicit Journal(QObject *parent = 0);
+    explicit Journal(QObject *parent = nullptr);
 
 public slots:
     void addMatch(const QString & match);

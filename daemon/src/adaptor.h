@@ -10,7 +10,7 @@ class Adaptor : public QObject
     Q_OBJECT
     Q_CLASSINFO("D-Bus Interface", "ru.omprussia.systemd.journal")
 public:
-    explicit Adaptor(QObject *parent = 0);
+    explicit Adaptor(QObject *parent = nullptr);
 
 public slots:
     void start();
@@ -34,6 +34,8 @@ public slots:
     Q_SCRIPTABLE void flushMatches();
     Q_SCRIPTABLE void skipTail(int size);
     Q_SCRIPTABLE void seekTimestamp(quint64 timestamp);
+
+    Q_SCRIPTABLE void saveJournal(const QString &filename);
 };
 
 #endif // ADAPTOR_H
