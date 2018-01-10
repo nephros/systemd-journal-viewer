@@ -5,7 +5,7 @@ Name:       systemd-journal-viewer
 %{!?qtc_make:%define qtc_make make}
 %{?qtc_builddir:%define _builddir %qtc_builddir}
 Summary:    Systemd Journal Viewer
-Version:    0.4.0
+Version:    0.4.1
 Release:    1
 Group:      Qt/Qt
 License:    LICENSE
@@ -38,10 +38,15 @@ Short description of my Sailfish OS Application
 rm -rf %{buildroot}
 %qmake5_install
 
-
 desktop-file-install --delete-original       \
   --dir %{buildroot}%{_datadir}/applications             \
    %{buildroot}%{_datadir}/applications/*.desktop
+
+%post
+sed -i 's/.*RateLimitInterval=.*/RateLimitInterval=0/' /etc/systemd/journald.conf
+sed -i 's/.*Storage=.*/Storage=persistent/' /etc/systemd/journald.conf
+sed -i 's/.*MaxRetentionSec=.*/MaxRetentionSec=0/' /etc/systemd/journald.conf
+systemctl restart systemd-journald
 
 %files
 %attr(4755, root, root) %{_bindir}/systemd-journal-daemon
