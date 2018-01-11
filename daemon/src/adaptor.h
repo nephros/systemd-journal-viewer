@@ -35,7 +35,7 @@ public slots:
     Q_SCRIPTABLE void skipTail(int size);
     Q_SCRIPTABLE void seekTimestamp(quint64 timestamp);
 
-    Q_SCRIPTABLE void saveJournal(const QString &filename);
+    Q_SCRIPTABLE void saveJournal();
 };
 
 #endif // ADAPTOR_H

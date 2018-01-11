@@ -39,8 +39,7 @@ Page {
                 property string notification: qsTr("Journal saved to Documents!")
                 text: label
                 onClicked: {
-                    var filename = "/home/nemo/Documents/system-%1.journal".arg(Qt.formatDateTime(new Date, "yyyy-MM-dd_hh-mm-ss"))
-                    dbus.call("saveJournal", [filename])
+                    dbus.call("saveJournal", [])
                     saveTimer.start()
                     text = notification
                 }

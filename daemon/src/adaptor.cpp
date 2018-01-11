@@ -76,9 +76,9 @@ void Adaptor::seekTimestamp(quint64 timestamp)
     emit doSeekTimestamp(timestamp);
 }
 
-void Adaptor::saveJournal(const QString &filename)
+void Adaptor::saveJournal()
 {
-    qDebug() << Q_FUNC_INFO << filename;
+    qDebug() << Q_FUNC_INFO;
 
     const QStringList locations = { QStringLiteral("/var/log/journal"), QStringLiteral("/run/log/journal") };
     for (const QString &location : locations) {
@@ -94,26 +94,32 @@ void Adaptor::saveJournal(const QString &filename)
         }
         journalDir.cd(folders.first());
 
-        QString journalFileName = journalDir.absoluteFilePath(QStringLiteral("system.journal"));
-        if (!QFileInfo::exists(journalFileName)) {
-            qWarning() << "Directory does not contain system journal" << journalFileName;
-            return;
+        QDir saveLogDir(QStringLiteral("/home/nemo/Documents/%1")
+                                       .arg(QDateTime::currentDateTime().toString(QStringLiteral("yyyy-MM-dd_hh-mm-ss-zzz"))));
+        if (!saveLogDir.exists()) {
+            QDir::root().mkpath(saveLogDir.absolutePath());
         }
 
-        QString newFileName = filename;
-        if (QFileInfo::exists(newFileName)) {
-            newFileName.append('0');
+        for (const QString &filename : journalDir.entryList(QDir::Files)) {
+            QString journalFileName = journalDir.absoluteFilePath(filename);
+
+            if (!QFileInfo::exists(journalFileName)) {
+                qWarning() << "Directory does not contain system journal" << journalFileName;
+                return;
+            }
+
+            QString newFileName = saveLogDir.absoluteFilePath(filename);
+
+            if (!QFile::copy(journalFileName, newFileName)) {
+                qWarning() << "Journal save failed" << newFileName;
+                return;
+            }
+
+            const struct group *nemoGroup = getgrnam("nemo");
+            const struct passwd *nemoPasswd = getpwnam("nemo");
+
+            chown(newFileName.toLatin1().constData(), nemoPasswd->pw_uid, nemoGroup->gr_gid);
+            chmod(newFileName.toLatin1().constData(), 0644);
         }
-
-        if (!QFile::copy(journalFileName, newFileName)) {
-            qWarning() << "Journal save failed" << newFileName;
-            return;
-        }
-
-        const struct group *nemoGroup = getgrnam("nemo");
-        const struct passwd *nemoPasswd = getpwnam("nemo");
-
-        chown(newFileName.toLatin1().constData(), nemoPasswd->pw_uid, nemoGroup->gr_gid);
-        chmod(newFileName.toLatin1().constData(), 0644);
     }
 }
