@@ -16,7 +16,7 @@ public slots:
     void start();
 
 private:
-    Journal *m_journal;
+    Journal *m_journal = nullptr;
 
 signals:
     Q_SCRIPTABLE void dataReceived(const QVariantList & data);

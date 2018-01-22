@@ -91,7 +91,8 @@ Page {
 
             menu: ContextMenu {
                 MenuLabel {
-                    text: Qt.formatDateTime(new Date(model["__TIMESTAMP"]), "dd.MM.yy hh:mm:ss.zzz")                }
+                    text: Qt.formatDateTime(new Date(model["__TIMESTAMP"]), "dd.MM.yy hh:mm:ss.zzz")
+                }
                 MenuItem {
                     text: qsTr("Copy to clipboard")
                     onClicked: {
@@ -116,7 +117,7 @@ Page {
                     font.family: "Courier"
                     font.pixelSize: Theme.fontSizeTiny
                     visible: !!model["SYSLOG_IDENTIFIER"] || !!model["_PID"]
-                    font.bold :true
+                    font.bold: true
                 }
 
                 Label {

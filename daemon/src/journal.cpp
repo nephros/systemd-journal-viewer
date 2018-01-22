@@ -59,7 +59,7 @@ void Journal::wait()
 {
     JournalWaiter *jw = new JournalWaiter(sdj);
     QThread *thread = new QThread(this);
-    thread->setObjectName(QString("journalWaiter-%1").arg(QDateTime::currentMSecsSinceEpoch()));
+    thread->setObjectName(QStringLiteral("journalWaiter-%1").arg(QDateTime::currentMSecsSinceEpoch()));
     jw->moveToThread(thread);
     connect(thread, &QThread::started, jw, &JournalWaiter::start);
     connect(jw, &JournalWaiter::destroyed, thread, &QThread::quit);
@@ -102,7 +102,7 @@ void Journal::process()
 
         JOURNAL_FOREACH_DATA_RETVAL(sdj, data, length, ret) {
             QString fieldLine = QString::fromUtf8((const char*)data, length);
-            int fieldIndex = fieldLine.indexOf(QStringLiteral("="));
+            int fieldIndex = fieldLine.indexOf(QChar('='));
             QString fieldName = fieldLine.left(fieldIndex);
             QString fieldData = fieldLine.mid(fieldIndex + 1);
             jsonData[fieldName] = fieldData;
@@ -117,12 +117,12 @@ void Journal::process()
         jsonData["__TIMESTAMP"] = realtime / 1000;
         dataList.insert(0, jsonData);
 
-        if (dataList.length() == 10) {
+        if (dataList.length() == 1000) {
             emit dataReceived(dataList);
             dataList.clear();
-        }
 
-        QCoreApplication::processEvents();
+            QCoreApplication::processEvents();
+        }
         next_ret = sd_journal_next(sdj);
     }
 

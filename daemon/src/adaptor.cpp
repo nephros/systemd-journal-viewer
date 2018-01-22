@@ -23,8 +23,8 @@ Adaptor::Adaptor(QObject *parent)
 
 void Adaptor::start()
 {
-    if (QDBusConnection::sessionBus().registerService("ru.omprussia.systemd.journal")) {
-        QDBusConnection::sessionBus().registerObject("/", this, QDBusConnection::ExportScriptableSlots | QDBusConnection::ExportScriptableSignals);
+    if (QDBusConnection::sessionBus().registerService(QStringLiteral("ru.omprussia.systemd.journal"))) {
+        QDBusConnection::sessionBus().registerObject(QStringLiteral("/"), this, QDBusConnection::ExportScriptableSlots | QDBusConnection::ExportScriptableSignals);
 
         m_journal = new Journal(this);
         m_journal->init();

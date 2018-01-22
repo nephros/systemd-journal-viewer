@@ -51,7 +51,7 @@ public slots:
     void seekTimestamp(quint64 timestamp);
 
 private:
-    sd_journal *sdj;
+    sd_journal *sdj = nullptr;
 
 signals:
     void dataReceived(const QVariantList & data);

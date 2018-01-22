@@ -28,6 +28,7 @@ Dialog {
     }
 
     SilicaFlickable {
+        id: optionsFlick
         anchors.fill: parent
         contentHeight: content.height
 
@@ -37,6 +38,7 @@ Dialog {
             spacing: Theme.paddingSmall
 
             DialogHeader {
+                flickable: optionsFlick
                 title: qsTr("Options")
                 acceptText: qsTr("Apply changes")
                 cancelText: qsTr("Cancel")

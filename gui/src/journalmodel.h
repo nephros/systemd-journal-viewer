@@ -10,7 +10,7 @@ class JournalModel : public QAbstractListModel
     Q_OBJECT
     Q_PROPERTY(QVariantMap lastEntry READ lastEntry NOTIFY lastEntryChanged)
 public:
-    explicit JournalModel(QObject *parent = 0);
+    explicit JournalModel(QObject *parent = nullptr);
 
     int rowCount(const QModelIndex &) const;
     QVariant data(const QModelIndex &index, int role) const;
