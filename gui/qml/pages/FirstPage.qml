@@ -1,5 +1,6 @@
 import QtQuick 2.0
 import Sailfish.Silica 1.0
+import org.nemomobile.dbus 2.0
 import org.omprussia.systemd.journal 1.0
 
 Page {
@@ -21,6 +22,13 @@ Page {
 
     Component.onDestruction: {
         journalModel.quit()
+    }
+
+    DBusInterface {
+        id: dbus
+        service: "ru.omprussia.systemd.journal"
+        path: "/"
+        iface: "ru.omprussia.systemd.journal"
     }
 
     JournalModel {
@@ -52,6 +60,15 @@ Page {
         }
 
         PushUpMenu {
+            MenuItem {
+                text: qsTr("Save journal database")
+                onClicked: {
+                    dbus.call("saveJournal", [])
+                    listView.alternateTitle = qsTr("Journal saved to Documents")
+                    alternateTimer.start()
+                }
+            }
+
             MenuItem {
                 text: qsTr("Save log to file")
                 onClicked: {
