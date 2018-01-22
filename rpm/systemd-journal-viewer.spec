@@ -46,6 +46,7 @@ desktop-file-install --delete-original       \
 sed -i 's/.*RateLimitInterval=.*/RateLimitInterval=0/' /etc/systemd/journald.conf
 sed -i 's/.*Storage=.*/Storage=persistent/' /etc/systemd/journald.conf
 sed -i 's/.*MaxRetentionSec=.*/MaxRetentionSec=0/' /etc/systemd/journald.conf
+sed -i 's/.*SystemMaxUse=.*/SystemMaxUse=10M/' /etc/systemd/journald.conf
 systemctl restart systemd-journald
 
 %files
