@@ -60,7 +60,7 @@ CoverBackground {
             Label {
                 width: parent.width
                 wrapMode: Text.WrapAnywhere
-                text: lastEntry ? !!lastEntry["MESSAGE"] : ""
+                text: lastEntry ? lastEntry["MESSAGE"] : ""
                 visible: lastEntry && !!lastEntry["MESSAGE"]
                 color: Theme.primaryColor
                 font.family: "Courier"
