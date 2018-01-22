@@ -24,6 +24,13 @@ QVariant JournalModel::data(const QModelIndex &index, int role) const
     return m_modelData[m_modelData.count() - row - 1][m_roles[role]];
 }
 
+QVariantMap JournalModel::lastEntry() const
+{
+    if (m_modelData.isEmpty()) {
+        return QVariantMap();
+    }
+    return m_modelData.last();
+}
 void JournalModel::skipTail(int count)
 {
     m_iface->call(QDBus::NoBlock, "skipTail", count);
@@ -100,6 +107,7 @@ void JournalModel::onDataReceived(const QVariantList &data)
         m_modelData.append(journalData);
     }
     endInsertRows();
+    emit lastEntryChanged();
 }
 
 QVariant JournalModel::unwind(const QVariant &val, int depth)

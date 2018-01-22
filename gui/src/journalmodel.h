@@ -8,12 +8,18 @@
 class JournalModel : public QAbstractListModel
 {
     Q_OBJECT
+    Q_PROPERTY(QVariantMap lastEntry READ lastEntry NOTIFY lastEntryChanged)
 public:
     explicit JournalModel(QObject *parent = 0);
 
     int rowCount(const QModelIndex &) const;
     QVariant data(const QModelIndex &index, int role) const;
     QHash<int, QByteArray> roleNames() const { return m_roles; }
+
+    QVariantMap lastEntry() const;
+
+signals:
+    void lastEntryChanged();
 
 public slots:
     void skipTail(int count);
