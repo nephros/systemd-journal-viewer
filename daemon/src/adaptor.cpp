@@ -8,6 +8,7 @@
 #include <QDebug>
 #include <QFile>
 #include <QDir>
+#include <QProcess>
 
 #include <sys/stat.h>
 #include <unistd.h>
@@ -85,41 +86,22 @@ void Adaptor::saveJournal()
         QDir journalDir(location);
         if (!journalDir.exists()) {
             qWarning() << "Directory does not exist" << journalDir.absolutePath();
+            continue;
+        }
+
+        QProcess tar;
+        QString filename = QStringLiteral("/home/nemo/Documents/journal-%1.tar").arg(QDateTime::currentDateTime().toString(QStringLiteral("yyyy-MM-dd_hh-mm-ss-zzz")));
+        tar.start(QStringLiteral("/bin/tar"), { QStringLiteral("cvf"), filename, location });
+        tar.waitForFinished(-1);
+        if (!QFileInfo::exists(filename)) {
+            qWarning() << "tar failed!" << tar.readAll();
             return;
         }
-        QStringList folders = journalDir.entryList(QDir::Dirs | QDir::NoDotAndDotDot);
-        if (folders.isEmpty()) {
-            qWarning() << "Directory does not contain journal subdir" << journalDir.absolutePath();
-            return;
-        }
-        journalDir.cd(folders.first());
 
-        QDir saveLogDir(QStringLiteral("/home/nemo/Documents/%1")
-                                       .arg(QDateTime::currentDateTime().toString(QStringLiteral("yyyy-MM-dd_hh-mm-ss-zzz"))));
-        if (!saveLogDir.exists()) {
-            QDir::root().mkpath(saveLogDir.absolutePath());
-        }
+        const struct group *nemoGroup = getgrnam("nemo");
+        const struct passwd *nemoPasswd = getpwnam("nemo");
 
-        for (const QString &filename : journalDir.entryList(QDir::Files)) {
-            QString journalFileName = journalDir.absoluteFilePath(filename);
-
-            if (!QFileInfo::exists(journalFileName)) {
-                qWarning() << "Directory does not contain system journal" << journalFileName;
-                return;
-            }
-
-            QString newFileName = saveLogDir.absoluteFilePath(filename);
-
-            if (!QFile::copy(journalFileName, newFileName)) {
-                qWarning() << "Journal save failed" << newFileName;
-                return;
-            }
-
-            const struct group *nemoGroup = getgrnam("nemo");
-            const struct passwd *nemoPasswd = getpwnam("nemo");
-
-            chown(newFileName.toLatin1().constData(), nemoPasswd->pw_uid, nemoGroup->gr_gid);
-            chmod(newFileName.toLatin1().constData(), 0644);
-        }
+        chown(filename.toLatin1().constData(), nemoPasswd->pw_uid, nemoGroup->gr_gid);
+        chmod(filename.toLatin1().constData(), 0644);
     }
 }
