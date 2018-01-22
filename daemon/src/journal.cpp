@@ -115,7 +115,7 @@ void Journal::process()
         }
 
         jsonData["__TIMESTAMP"] = realtime / 1000;
-        dataList.insert(0, jsonData);
+        dataList.append(jsonData);
 
         if (dataList.length() == 1000) {
             emit dataReceived(dataList);
