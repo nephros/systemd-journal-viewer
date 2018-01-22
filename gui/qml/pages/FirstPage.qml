@@ -25,6 +25,9 @@ Page {
 
     JournalModel {
         id: journalModel
+        onLastEntryChanged: {
+            appWindow.updateLastEntry(journalModel.lastEntry)
+        }
     }
 
     SilicaListView {
