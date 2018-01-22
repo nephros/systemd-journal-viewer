@@ -67,7 +67,7 @@ Dialog {
                 id: lastNumber
                 width: parent.width
                 inputMethodHints: Qt.ImhDigitsOnly
-                validator: IntValidator { bottom: 0; top: 9999 }
+                validator: IntValidator { bottom: 0; top: 999999 }
                 text: "50"
                 placeholderText: "50"
                 label: qsTr("Load N last messages")
