@@ -11,13 +11,14 @@ class JournalWaiter : public QObject
 {
     Q_OBJECT
 public:
-    explicit JournalWaiter(sd_journal *sdj) : QObject(nullptr) {
-        this->sdj = sdj;
-    }
+    explicit JournalWaiter(sd_journal *sdj)
+        : QObject(nullptr)
+        , m_sdj(sdj)
+    {}
 
 public slots:
     void start() {
-        int ret = sd_journal_wait(sdj, (uint64_t)-1);
+        int ret = sd_journal_wait(m_sdj, (uint64_t)-1);
         if (ret < 0) {
             emit pollFailed();
         } else if (ret == SD_JOURNAL_NOP) {
@@ -25,12 +26,10 @@ public slots:
         } else {
             emit canProcess();
         }
-
-        deleteLater();
     }
 
 private:
-    sd_journal *sdj;
+    sd_journal *m_sdj;
 
 signals:
     void pollFailed();
@@ -51,7 +50,8 @@ public slots:
     void seekTimestamp(quint64 timestamp);
 
 private:
-    sd_journal *sdj = nullptr;
+    sd_journal *m_sdj = nullptr;
+    JournalWaiter *m_jw = nullptr;
 
 signals:
     void dataReceived(const QVariantList & data);
