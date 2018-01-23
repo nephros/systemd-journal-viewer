@@ -55,25 +55,21 @@ void Adaptor::quit()
 
 void Adaptor::addMatch(const QString &match)
 {
-    qDebug() << Q_FUNC_INFO << match;
     emit doAddMatch(match);
 }
 
 void Adaptor::flushMatches()
 {
-    qDebug() << Q_FUNC_INFO;
     emit doFlushMatches();
 }
 
 void Adaptor::skipTail(int size)
 {
-    qDebug() << Q_FUNC_INFO << size;
     emit doSkipTail(size);
 }
 
 void Adaptor::seekTimestamp(quint64 timestamp)
 {
-    qDebug() << Q_FUNC_INFO << timestamp;
     emit doSeekTimestamp(timestamp);
 }
 
