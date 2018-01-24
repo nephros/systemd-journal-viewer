@@ -16,6 +16,7 @@ JournalModel::JournalModel(QObject *parent)
                                           QStringLiteral("ru.omprussia.systemd.journal"),
                                           QStringLiteral("dataReceived"),
                                           this, SLOT(onDataReceived(QVariantList)));
+    m_iface->call(QDBus::NoBlock, QStringLiteral("init"));
 }
 
 int JournalModel::rowCount(const QModelIndex &) const

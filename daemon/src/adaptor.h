@@ -29,6 +29,7 @@ signals:
 public slots:
     Q_SCRIPTABLE void ping();
     Q_SCRIPTABLE void quit();
+    Q_SCRIPTABLE void init();
 
     Q_SCRIPTABLE void addMatch(const QString & match);
     Q_SCRIPTABLE void flushMatches();

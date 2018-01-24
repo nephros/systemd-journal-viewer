@@ -23,23 +23,25 @@ Adaptor::Adaptor(QObject *parent)
 
 void Adaptor::start()
 {
-    if (QDBusConnection::sessionBus().registerService(QStringLiteral("ru.omprussia.systemd.journal"))) {
-        QDBusConnection::sessionBus().registerObject(QStringLiteral("/"), this, QDBusConnection::ExportScriptableSlots | QDBusConnection::ExportScriptableSignals);
-
-        m_journal = new Journal(this);
-        m_journal->init();
-
-        connect(m_journal, &Journal::quit, this, &Adaptor::quit);
-        connect(m_journal, &Journal::dataReceived, this, &Adaptor::dataReceived);
-
-        connect(this, &Adaptor::doAddMatch, m_journal, &Journal::addMatch, Qt::DirectConnection);
-        connect(this, &Adaptor::doFlushMatches, m_journal, &Journal::flushMatches, Qt::DirectConnection);
-        connect(this, &Adaptor::doSkipTail, m_journal, &Journal::skipTail, Qt::DirectConnection);
-        connect(this, &Adaptor::doSeekTimestamp, m_journal, &Journal::seekTimestamp, Qt::DirectConnection);
-    }
-    else {
+    QDBusConnection bus = QDBusConnection::sessionBus();
+    if (!bus.registerObject(QStringLiteral("/"), this, QDBusConnection::ExportScriptableSlots | QDBusConnection::ExportScriptableSignals)) {
+        qCritical() << "Cannot register object";
         qApp->quit();
     }
+    if (!QDBusConnection::sessionBus().registerService(QStringLiteral("ru.omprussia.systemd.journal"))) {
+        qCritical() << "Cannot register service";
+        qApp->quit();
+    }
+
+    m_journal = new Journal(this);
+
+    connect(m_journal, &Journal::quit, this, &Adaptor::quit);
+    connect(m_journal, &Journal::dataReceived, this, &Adaptor::dataReceived);
+
+    connect(this, &Adaptor::doAddMatch, m_journal, &Journal::addMatch, Qt::DirectConnection);
+    connect(this, &Adaptor::doFlushMatches, m_journal, &Journal::flushMatches, Qt::DirectConnection);
+    connect(this, &Adaptor::doSkipTail, m_journal, &Journal::skipTail, Qt::DirectConnection);
+    connect(this, &Adaptor::doSeekTimestamp, m_journal, &Journal::seekTimestamp, Qt::DirectConnection);
 }
 
 void Adaptor::ping()
@@ -51,6 +53,14 @@ void Adaptor::quit()
 {
     qDebug() << Q_FUNC_INFO;
     qApp->quit();
+}
+
+void Adaptor::init()
+{
+    if (!m_journal) {
+        qCritical() << "Journal does not exists!";
+    }
+    m_journal->init();
 }
 
 void Adaptor::addMatch(const QString &match)
