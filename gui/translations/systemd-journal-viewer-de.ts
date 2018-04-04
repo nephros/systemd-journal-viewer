@@ -109,4 +109,23 @@
         <translation type="unfinished"></translation>
     </message>
 </context>
+<context>
+    <name>WelcomePage</name>
+    <message>
+        <source>System Journal</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Read logs</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Save journal</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Journal saved to Documents!</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
 </TS>

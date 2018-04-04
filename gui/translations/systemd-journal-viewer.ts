@@ -4,7 +4,7 @@
 <context>
     <name>CoverPage</name>
     <message>
-        <source>Journal Log</source>
+        <source>Journal Viewer</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -35,6 +35,14 @@
     </message>
     <message>
         <source>Save log to file</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Save journal database</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Journal saved to Documents</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
