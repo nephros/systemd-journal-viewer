@@ -5,7 +5,7 @@ Name:       systemd-journal-viewer
 %{!?qtc_make:%define qtc_make make}
 %{?qtc_builddir:%define _builddir %qtc_builddir}
 Summary:    Systemd Journal Viewer
-Version:    0.4.1
+Version:    0.5.5
 Release:    1
 Group:      Qt/Qt
 License:    LICENSE
@@ -47,7 +47,6 @@ sed -i 's/.*RateLimitInterval=.*/RateLimitInterval=0/' /etc/systemd/journald.con
 sed -i 's/.*Storage=.*/Storage=persistent/' /etc/systemd/journald.conf
 sed -i 's/.*MaxRetentionSec=.*/MaxRetentionSec=0/' /etc/systemd/journald.conf
 sed -i 's/.*SystemMaxUse=.*/SystemMaxUse=10M/' /etc/systemd/journald.conf
-systemctl restart systemd-journald
 
 %files
 %attr(4755, root, root) %{_bindir}/systemd-journal-daemon
