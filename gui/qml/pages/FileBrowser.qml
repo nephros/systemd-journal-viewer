@@ -27,11 +27,8 @@ Dialog {
         path: homePath
         active: dialog.status === DialogStatus.Opened
         directorySort: FileModel.SortDirectoriesBeforeFiles
-        nameFilters: ['###NO#FILES#PLEASE###']  // yes, it's a hack
+        includeFiles: false
         caseSensitivity: Qt.CaseInsensitive
-        onError: {
-            console.log("###", fileName, error)
-        }
     }
     SilicaListView {
         id: fileList

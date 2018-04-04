@@ -8,7 +8,7 @@
 class Adaptor : public QObject
 {
     Q_OBJECT
-    Q_CLASSINFO("D-Bus Interface", "ru.omprussia.systemd.journal")
+    Q_CLASSINFO("D-Bus Interface", "org.coderus.systemd.journal")
 public:
     explicit Adaptor(QObject *parent = nullptr);
 

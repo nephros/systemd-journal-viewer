@@ -28,7 +28,7 @@ void Adaptor::start()
         qCritical() << "Cannot register object";
         qApp->quit();
     }
-    if (!QDBusConnection::sessionBus().registerService(QStringLiteral("ru.omprussia.systemd.journal"))) {
+    if (!QDBusConnection::sessionBus().registerService(QStringLiteral("org.coderus.systemd.journal"))) {
         qCritical() << "Cannot register service";
         qApp->quit();
     }
@@ -95,8 +95,12 @@ void Adaptor::saveJournal()
             continue;
         }
 
+        const struct passwd *userPasswd = getpwuid(100000);
+
         QProcess tar;
-        QString filename = QStringLiteral("/home/nemo/Documents/journal-%1.tar").arg(QDateTime::currentDateTime().toString(QStringLiteral("yyyy-MM-dd_hh-mm-ss-zzz")));
+        QString filename = QStringLiteral("/home/%1/Documents/journal-%2.tar")
+            .arg(QString(userPasswd->pw_name))
+            .arg(QDateTime::currentDateTime().toString(QStringLiteral("yyyy-MM-dd_hh-mm-ss-zzz")));
         tar.start(QStringLiteral("/bin/tar"), { QStringLiteral("cvf"), filename, location });
         tar.waitForFinished(-1);
         if (!QFileInfo::exists(filename)) {
@@ -104,10 +108,9 @@ void Adaptor::saveJournal()
             return;
         }
 
-        const struct group *nemoGroup = getgrnam("nemo");
-        const struct passwd *nemoPasswd = getpwnam("nemo");
+        const struct group *userGroup = getgrgid(100000);
 
-        chown(filename.toLatin1().constData(), nemoPasswd->pw_uid, nemoGroup->gr_gid);
+        chown(filename.toLatin1().constData(), userPasswd->pw_uid, userGroup->gr_gid);
         chmod(filename.toLatin1().constData(), 0644);
     }
 }

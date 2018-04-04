@@ -1,5 +1,5 @@
 [D-BUS Service]
-Name=ru.omprussia.systemd.journal
-Interface=ru.omprussia.systemd.journal
+Name=org.coderus.systemd.journal
+Interface=org.coderus.systemd.journal
 Exec=/bin/false
 SystemdService=systemd-journal-daemon.service

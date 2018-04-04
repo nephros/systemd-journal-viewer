@@ -5,7 +5,7 @@ Name:       systemd-journal-viewer
 %{!?qtc_make:%define qtc_make make}
 %{?qtc_builddir:%define _builddir %qtc_builddir}
 Summary:    Systemd Journal Viewer
-Version:    0.5.5
+Version:    0.5.6
 Release:    1
 Group:      Qt/Qt
 License:    LICENSE
@@ -18,7 +18,7 @@ BuildRequires:  pkgconfig(Qt5Core)
 BuildRequires:  pkgconfig(Qt5Qml)
 BuildRequires:  pkgconfig(Qt5Quick)
 BuildRequires:  desktop-file-utils
-BuildRequires:  pkgconfig(libsystemd-journal)
+BuildRequires:  pkgconfig(libsystemd)
 
 %description
 Short description of my Sailfish OS Application
@@ -42,18 +42,12 @@ desktop-file-install --delete-original       \
   --dir %{buildroot}%{_datadir}/applications             \
    %{buildroot}%{_datadir}/applications/*.desktop
 
-%post
-sed -i 's/.*RateLimitInterval=.*/RateLimitInterval=0/' /etc/systemd/journald.conf
-sed -i 's/.*Storage=.*/Storage=persistent/' /etc/systemd/journald.conf
-sed -i 's/.*MaxRetentionSec=.*/MaxRetentionSec=0/' /etc/systemd/journald.conf
-sed -i 's/.*SystemMaxUse=.*/SystemMaxUse=10M/' /etc/systemd/journald.conf
-
 %files
 %attr(4755, root, root) %{_bindir}/systemd-journal-daemon
 %attr(0755, root, root) %{_bindir}/systemd-journal-viewer
 %defattr(-,root,root,-)
-%{_datadir}/dbus-1/services/ru.omprussia.systemd.journal.service
-%{_libdir}/systemd/user/systemd-journal-daemon.service
+%{_datadir}/dbus-1/services/org.coderus.systemd.journal.service
+%{_userunitdir}/systemd-journal-daemon.service
 %{_datadir}/%{name}
 %{_datadir}/applications/%{name}.desktop
 %{_datadir}/icons/hicolor/*/apps/%{name}.png

@@ -114,7 +114,7 @@ void Journal::process()
             break;
         }
 
-        jsonData["__TIMESTAMP"] = realtime / 1000;
+        jsonData["__TIMESTAMP"] = (quint64)realtime / 1000ULL;
         dataList.append(jsonData);
 
         if (dataList.length() == 100) {
