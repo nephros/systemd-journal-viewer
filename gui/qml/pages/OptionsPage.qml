@@ -87,7 +87,7 @@ Dialog {
                     selectedDate.setMinutes(minute)
                     selectedDateChanged()
                 }
-                value: Qt.formatDateTime(selectedDate, "dd-MM-yyyy hh:mm:ss")
+                value: Qt.formatDateTime(selectedDate, "yyyy-MM-dd hh:mm:ss")
                 visible: false
                 onClicked: {
                     pageStack.push(datePickerComponent, { date: sinceDate.selectedDate })

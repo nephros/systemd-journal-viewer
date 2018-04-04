@@ -80,7 +80,7 @@ void JournalModel::clear()
 
 void JournalModel::save(const QString &filePath)
 {
-    const QString fileName = QStringLiteral("%1/systemd-journal-%2.txt").arg(filePath).arg(QDateTime::currentDateTime().toString(QStringLiteral("ddMMyy_hhmmss-zzz")));
+    const QString fileName = QStringLiteral("%1/systemd-journal-%2.txt").arg(filePath).arg(QDateTime::currentDateTime().toString(QStringLiteral("yyyyMMdd_hhmmss-zzz")));
     QFile file(fileName);
     if (file.open(QFile::WriteOnly | QFile::Text)) {
         QTextStream out(&file);
