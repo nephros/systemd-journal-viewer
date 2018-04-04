@@ -4,9 +4,6 @@
 #include <QDebug>
 #include <stdio.h>
 
-#define JOURNAL_FOREACH_DATA_RETVAL(j, data, l, retval) \
-    for (sd_journal_restart_data(j); ((retval) = sd_journal_enumerate_data((j), &(data), &(l))) > 0; )
-
 Journal::Journal(QObject *parent)
     : QObject(parent)
 {
@@ -31,10 +28,8 @@ void Journal::skipTail(int size)
 {
     if (m_sdj) {
         if (sd_journal_seek_tail(m_sdj) == 0) {
-            if (size <= 0) {
-                sd_journal_previous(m_sdj);
-            } else {
-                sd_journal_previous_skip(m_sdj, (uint64_t)size);
+            if (size > 0) {
+               sd_journal_previous_skip(m_sdj, (uint64_t)size);
             }
         }
     }
@@ -102,11 +97,10 @@ void Journal::process()
     while (next_ret > 0) {
         const void *data;
         size_t length;
-        int ret;
 
         QVariantMap jsonData;
 
-        JOURNAL_FOREACH_DATA_RETVAL(m_sdj, data, length, ret) {
+        SD_JOURNAL_FOREACH_DATA(m_sdj, data, length) {
             QString fieldLine = QString::fromUtf8((const char*)data, length);
             int fieldIndex = fieldLine.indexOf(QChar('='));
             QString fieldName = fieldLine.left(fieldIndex);
