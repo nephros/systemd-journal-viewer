@@ -19,6 +19,7 @@ BuildRequires:  pkgconfig(Qt5Quick)
 BuildRequires:  pkgconfig(Qt5DBus)
 BuildRequires:  desktop-file-utils
 BuildRequires:  pkgconfig(libsystemd)
+BuildRequires:  pkgconfig(systemd)
 
 %description
 Short description of my Sailfish OS Application
