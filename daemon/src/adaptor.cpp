@@ -9,6 +9,7 @@
 #include <QFile>
 #include <QDir>
 #include <QProcess>
+#include <QStandardPaths>
 
 #include <sys/stat.h>
 #include <unistd.h>
@@ -98,9 +99,8 @@ void Adaptor::saveJournal()
         const struct passwd *userPasswd = getpwuid(100000);
 
         QProcess tar;
-        QString filename = QStringLiteral("/home/%1/Documents/journal-%2.tar")
-            .arg(QString(userPasswd->pw_name))
-            .arg(QDateTime::currentDateTime().toString(QStringLiteral("yyyy-MM-dd_hh-mm-ss-zzz")));
+        QString filename = QStandardPaths::writableLocation(QStandardPaths::DocumentsLocation)
+            + QStringLiteral("/journal-%1.tar").arg(QDateTime::currentDateTime().toString(QStringLiteral("yyyy-MM-dd_hh-mm-ss-zzz")));
         tar.start(QStringLiteral("/bin/tar"), { QStringLiteral("cvf"), filename, location });
         tar.waitForFinished(-1);
         if (!QFileInfo::exists(filename)) {
