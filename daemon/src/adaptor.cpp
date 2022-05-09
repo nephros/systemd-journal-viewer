@@ -105,10 +105,10 @@ void Adaptor::saveJournal()
             return;
         }
 
-        const struct group *nemoGroup = getgrnam("nemo");
-        const struct passwd *nemoPasswd = getpwnam("nemo");
+        const struct group *userGroup = getgrgid(100000);
+        const struct passwd *userPasswd = getpwuid(100000);
 
-        chown(filename.toLatin1().constData(), nemoPasswd->pw_uid, nemoGroup->gr_gid);
+        chown(filename.toLatin1().constData(), userPasswd->pw_uid, userGroup->gr_gid);
         chmod(filename.toLatin1().constData(), 0644);
     }
 }
