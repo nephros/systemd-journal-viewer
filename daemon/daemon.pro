@@ -3,7 +3,7 @@ target.path = /usr/bin
 
 QT += dbus
 CONFIG += link_pkgconfig
-PKGCONFIG += libsystemd-journal
+PKGCONFIG += libsystemd
 
 
 SOURCES += src/daemon.cpp \
