@@ -4,3 +4,8 @@ X-Nemo-Application-Type=silica-qt5
 Icon=systemd-journal-viewer
 Exec=systemd-journal-viewer
 Name=Journal Viewer
+
+[X-Sailjail]
+Permissions=Documents
+OrganizationName=ru.omprussia.systemd.journal
+ApplicationName=JournalViewer
