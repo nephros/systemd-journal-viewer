@@ -96,8 +96,6 @@ void Adaptor::saveJournal()
             continue;
         }
 
-        const struct passwd *userPasswd = getpwuid(100000);
-
         QProcess tar;
         QString filename = QStandardPaths::writableLocation(QStandardPaths::DocumentsLocation)
             + QStringLiteral("/journal-%1.tar").arg(QDateTime::currentDateTime().toString(QStringLiteral("yyyy-MM-dd_hh-mm-ss-zzz")));
@@ -108,8 +106,8 @@ void Adaptor::saveJournal()
             return;
         }
 
+        const struct passwd *userPasswd = getpwuid(100000);
         const struct group *userGroup = getgrgid(100000);
-
         chown(filename.toLatin1().constData(), userPasswd->pw_uid, userGroup->gr_gid);
         chmod(filename.toLatin1().constData(), 0644);
     }
