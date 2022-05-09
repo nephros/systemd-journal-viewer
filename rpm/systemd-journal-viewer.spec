@@ -19,6 +19,7 @@ BuildRequires:  pkgconfig(Qt5Quick)
 BuildRequires:  pkgconfig(Qt5DBus)
 BuildRequires:  desktop-file-utils
 BuildRequires:  pkgconfig(libsystemd)
+BuildRequires:  pkgconfig(systemd)
 
 %description
 Short description of my Sailfish OS Application
@@ -53,7 +54,7 @@ sed -i 's/.*SystemMaxUse=.*/SystemMaxUse=10M/' /etc/systemd/journald.conf
 %attr(0755, root, root) %{_bindir}/systemd-journal-viewer
 %defattr(-,root,root,-)
 %{_datadir}/dbus-1/services/ru.omprussia.systemd.journal.service
-%{_libdir}/systemd/user/systemd-journal-daemon.service
+%{_userunitdir}/systemd-journal-daemon.service
 %{_datadir}/%{name}
 %{_datadir}/applications/%{name}.desktop
 %{_datadir}/icons/hicolor/*/apps/%{name}.png
