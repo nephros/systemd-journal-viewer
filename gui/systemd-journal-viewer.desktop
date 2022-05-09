@@ -6,4 +6,6 @@ Exec=systemd-journal-viewer
 Name=Journal Viewer
 
 [X-Sailjail]
-Sandboxing=Disabled
+Permissions=Documents
+OrganizationName=ru.omprussia.systemd.journal
+ApplicationName=JournalViewer
