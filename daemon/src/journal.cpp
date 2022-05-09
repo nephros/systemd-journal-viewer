@@ -114,7 +114,7 @@ void Journal::process()
             break;
         }
 
-        jsonData["__TIMESTAMP"] = realtime / 1000;
+        jsonData["__TIMESTAMP"] = QVariant::fromValue(realtime / 1000);
         dataList.append(jsonData);
 
         if (dataList.length() == 100) {
