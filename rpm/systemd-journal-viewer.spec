@@ -8,7 +8,14 @@ Summary:    GUI for viewing systemd logs
 Version:    0.5.6
 Release:    1
 Group:      Qt/Qt
-License:    LICENSE
+# The license is unspecified in the upstream code, repo, and .spec file.
+# However, the author (coderus) states:
+#
+# > hi, so, about license stuff. unfortunately I'm not a licence expert,
+# > i write my code under WTFPL,
+# Source: https://github.com/sailfishos-patches/patchmanager/discussions/57#discussioncomment-1419413
+# so lets use that here:
+License:    WTFPL
 URL:        http://example.org/
 Source0:    %{name}-%{version}.tar.bz2
 Requires:   sailfishsilica-qt5 >= 0.10.9
