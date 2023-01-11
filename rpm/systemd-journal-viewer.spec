@@ -43,16 +43,11 @@ desktop-file-install --delete-original       \
   --dir %{buildroot}%{_datadir}/applications             \
    %{buildroot}%{_datadir}/applications/*.desktop
 
-%post
-sed -i 's/.*RateLimitInterval=.*/RateLimitInterval=0/' /etc/systemd/journald.conf
-sed -i 's/.*Storage=.*/Storage=persistent/' /etc/systemd/journald.conf
-sed -i 's/.*MaxRetentionSec=.*/MaxRetentionSec=0/' /etc/systemd/journald.conf
-sed -i 's/.*SystemMaxUse=.*/SystemMaxUse=10M/' /etc/systemd/journald.conf
-
 %files
 %attr(4755, root, root) %{_bindir}/systemd-journal-daemon
 %attr(0755, root, root) %{_bindir}/systemd-journal-viewer
 %defattr(-,root,root,-)
+%{_sysconfdir}/systemd/journald.conf.d/*.conf
 %{_datadir}/dbus-1/services/ru.omprussia.systemd.journal.service
 %{_userunitdir}/systemd-journal-daemon.service
 %{_datadir}/%{name}
