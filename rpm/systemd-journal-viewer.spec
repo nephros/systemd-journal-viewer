@@ -4,7 +4,7 @@ Name:       systemd-journal-viewer
 %{!?qtc_qmake5:%define qtc_qmake5 %qmake5}
 %{!?qtc_make:%define qtc_make make}
 %{?qtc_builddir:%define _builddir %qtc_builddir}
-Summary:    Systemd Journal Viewer
+Summary:    GUI for viewing systemd logs
 Version:    0.5.6
 Release:    1
 Group:      Qt/Qt
@@ -22,15 +22,38 @@ BuildRequires:  pkgconfig(libsystemd)
 BuildRequires:  pkgconfig(systemd)
 
 %description
-Short description of my Sailfish OS Application
+%{summary}.
 
+%if "%{?vendor}" == "chum"
+PackageName: Journal Viewer
+Type: desktop-application
+DeveloperName: CODeRUS
+PackagerName: nephros
+Categories:
+ - System
+ - Utility
+Custom:
+  Repo: https://github.com/CODeRUS/systemd-journal-viewer
+  PackagingRepo: https://github.com/nephros/systemd-journal-viewer
+Screenshots:
+ - https://openrepos.net/sites/default/files/packages/13234/screenshot-snimokekrana20170111001.png
+ - https://openrepos.net/sites/default/files/packages/13234/screenshot-snimokekrana20170116001.png
+Url:
+  Homepage: https://openrepos.net/content/coderus/journal-viewer
+  Bugtracker: https://github.com/piggz/harbour-advanced-camera/issues
+  Donations:
+    - https://noyb.eu/en/donations-other-support-options
+    - https://my.fsfe.org/donate
+    - https://supporters.eff.org/donate/join-4
+    - https://openrepos.net/donate
+%endif
 
 %prep
 %setup -q -n %{name}-%{version}
 
 %build
 
-%qtc_qmake5 
+%qtc_qmake5
 
 %qtc_make %{?_smp_mflags}
 
