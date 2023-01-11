@@ -14,9 +14,16 @@ Group:      Qt/Qt
 # > hi, so, about license stuff. unfortunately I'm not a licence expert,
 # > i write my code under WTFPL,
 # Source: https://github.com/sailfishos-patches/patchmanager/discussions/57#discussioncomment-1419413
+#
+# and
+#
+# > my stuff with no license choice is WTFPL,
+#
+# Source: https://forum.sailfishos.org/t/journal-viewer-update-for-aarch-64-possible/9924/19
 # so lets use that here:
 License:    WTFPL
-URL:        http://example.org/
+
+URL:        https://openrepos.net/content/coderus/journal-viewer
 Source0:    %{name}-%{version}.tar.bz2
 Requires:   sailfishsilica-qt5 >= 0.10.9
 BuildRequires:  pkgconfig(sailfishapp) >= 1.0.2
