@@ -7,8 +7,8 @@
 
 int main(int argc, char *argv[])
 {
-    setuid(0);
-    setgid(0);
+    (void)!setuid(0);
+    (void)!setgid(0);
 
     qputenv("DBUS_SESSION_BUS_ADDRESS", QByteArrayLiteral("unix:path=/run/user/100000/dbus/user_bus_socket"));
 
