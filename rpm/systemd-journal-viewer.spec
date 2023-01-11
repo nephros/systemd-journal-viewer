@@ -47,6 +47,7 @@ desktop-file-install --delete-original       \
 %attr(4755, root, root) %{_bindir}/systemd-journal-daemon
 %attr(0755, root, root) %{_bindir}/systemd-journal-viewer
 %defattr(-,root,root,-)
+%{_sysconfdir}/systemd/journald.conf.d/*.conf
 %{_datadir}/dbus-1/services/org.coderus.systemd.journal.service
 %{_userunitdir}/systemd-journal-daemon.service
 %{_datadir}/%{name}

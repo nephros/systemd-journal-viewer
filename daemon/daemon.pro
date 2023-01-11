@@ -16,8 +16,12 @@ dbus.path = /usr/share/dbus-1/services
 systemd.files = systemd/systemd-journal-daemon.service
 systemd.path = /usr/lib/systemd/user
 
-INSTALLS += target dbus systemd
+journalconf.files = systemd/90_systemd-journal-daemon.conf
+journalconf.path = /etc/systemd/journald.conf.d
+
+INSTALLS += target dbus systemd journalconf
 
 HEADERS += \
     src/adaptor.h \
     src/journal.h
+
