@@ -108,7 +108,7 @@ void Adaptor::saveJournal()
         const struct group *userGroup = getgrgid(100000);
         const struct passwd *userPasswd = getpwuid(100000);
 
-        chown(filename.toLatin1().constData(), userPasswd->pw_uid, userGroup->gr_gid);
-        chmod(filename.toLatin1().constData(), 0644);
+        (void)!chown(filename.toLatin1().constData(), userPasswd->pw_uid, userGroup->gr_gid);
+        (void)!chmod(filename.toLatin1().constData(), 0644);
     }
 }
