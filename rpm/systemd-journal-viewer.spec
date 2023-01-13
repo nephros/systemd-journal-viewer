@@ -34,6 +34,7 @@ BuildRequires:  pkgconfig(Qt5DBus)
 BuildRequires:  desktop-file-utils
 BuildRequires:  pkgconfig(libsystemd)
 BuildRequires:  pkgconfig(systemd)
+%systemd_requires
 
 %description
 %{summary}.
@@ -71,7 +72,6 @@ Url:
 
 %qtc_make %{?_smp_mflags}
 
-
 %install
 rm -rf %{buildroot}
 %qmake5_install
@@ -79,6 +79,9 @@ rm -rf %{buildroot}
 desktop-file-install --delete-original       \
   --dir %{buildroot}%{_datadir}/applications             \
    %{buildroot}%{_datadir}/applications/*.desktop
+
+%postun
+%systemd_postun_with_restart systemd-journald.service
 
 %files
 %attr(4755, root, root) %{_bindir}/systemd-journal-daemon
