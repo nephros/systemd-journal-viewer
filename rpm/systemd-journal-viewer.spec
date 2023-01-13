@@ -80,8 +80,15 @@ desktop-file-install --delete-original       \
   --dir %{buildroot}%{_datadir}/applications             \
    %{buildroot}%{_datadir}/applications/*.desktop
 
+%post
+systemctl try-restart systemd-journald.service >/dev/null 2>&1 || :
+%systemd_user_post systemd-journal-daemon.service
+
+%preun
+%systemd_user_preun systemd-journal-daemon.service
+
 %postun
-%systemd_postun_with_restart systemd-journald.service
+%systemd_user_postun systemd-journal-daemon.service
 
 %files
 %attr(4755, root, root) %{_bindir}/systemd-journal-daemon
