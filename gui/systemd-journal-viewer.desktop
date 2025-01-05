@@ -7,5 +7,5 @@ Name=Journal Viewer
 
 [X-Sailjail]
 Permissions=Documents
-OrganizationName=ru.omprussia.systemd.journal
+OrganizationName=org.coderus.systemd.journal
 ApplicationName=JournalViewer
