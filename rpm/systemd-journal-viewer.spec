@@ -6,7 +6,7 @@ Name:       systemd-journal-viewer
 %{?qtc_builddir:%define _builddir %qtc_builddir}
 
 Summary:    GUI for viewing systemd logs
-Version:    0.5.6
+Version:    0.6.0
 Release:    1
 Group:      Qt/Qt
 # The license is unspecified in the upstream code, repo, and .spec file.
