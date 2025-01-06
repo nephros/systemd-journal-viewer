@@ -42,7 +42,7 @@ Page {
         id: listView
         model: journalModel
         anchors.fill: parent
-        property string currentTitle: Qt.application.name ? Qt.application.name : qsTr("Journal Viewer")
+        property string currentTitle: qsTr("Journal Viewer")
         property string alternateTitle
         header: PageHeader {
             title: listView.alternateTitle ? listView.alternateTitle : listView.currentTitle
