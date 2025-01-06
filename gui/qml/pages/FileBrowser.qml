@@ -8,7 +8,7 @@ Dialog {
     allowedOrientations: Orientation.Portrait
 
     property alias path: fileModel.path
-    property string homePath: StandardPaths.home
+    property string homePath: StandardPaths.documents
     property string title
 
     property var callback
