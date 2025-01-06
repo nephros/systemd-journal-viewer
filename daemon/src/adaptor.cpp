@@ -97,10 +97,10 @@ void Adaptor::saveJournal()
         }
 
         QProcess tar;
-        QString filename = QStringLiteral("%1/journal-%2.tar")
+        QString filename = QStringLiteral("%1/journal-%2.tar.gz")
             .arg(QStandardPaths::writableLocation(QStandardPaths::DocumentsLocation))
             .arg(QDateTime::currentDateTime().toString(QStringLiteral("yyyy-MM-dd_hh-mm-ss-zzz")));
-        tar.start(QStringLiteral("/bin/tar"), { QStringLiteral("cvf"), filename, location });
+        tar.start(QStringLiteral("/bin/tar"), { QStringLiteral("czf"), filename, location });
         tar.waitForFinished(-1);
         if (!QFileInfo::exists(filename)) {
             qWarning() << "tar failed!" << tar.readAll();
