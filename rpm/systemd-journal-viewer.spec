@@ -40,10 +40,10 @@ BuildRequires:  pkgconfig(systemd)
 %{summary}.
 
 %if "%{?vendor}" == "chum"
-PackageName: Journal Viewer
+Title: Journal Viewer
 Type: desktop-application
 DeveloperName: CODeRUS
-PackagerName: nephros
+PackagedBy: nephros
 Categories:
  - System
  - Utility
@@ -53,14 +53,6 @@ Custom:
 Screenshots:
  - https://openrepos.net/sites/default/files/packages/13234/screenshot-snimokekrana20170111001.png
  - https://openrepos.net/sites/default/files/packages/13234/screenshot-snimokekrana20170116001.png
-Url:
-  Homepage: https://openrepos.net/content/coderus/journal-viewer
-  Bugtracker: https://github.com/piggz/harbour-advanced-camera/issues
-  Donations:
-    - https://noyb.eu/en/donations-other-support-options
-    - https://my.fsfe.org/donate
-    - https://supporters.eff.org/donate/join-4
-    - https://openrepos.net/donate
 %endif
 
 %prep
