@@ -7,5 +7,6 @@ Name=Journal Viewer
 
 [X-Sailjail]
 Permissions=Documents
-OrganizationName=org.coderus.systemd.journal
-ApplicationName=JournalViewer
+# take care to match the dbus name!
+OrganizationName=org.coderus
+ApplicationName=systemd.journal
