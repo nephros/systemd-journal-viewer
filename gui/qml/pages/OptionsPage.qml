@@ -8,6 +8,19 @@ Dialog {
 
     ListModel {
         id: matchModel
+        function rmFilter(key) {
+            for (var i = 1; (count - i) >= 0;) {
+                const elem = get(matchModel.count - i);
+                //console.debug("Looking at:",i, elem.matchKey, elem.matchValue)
+                if ( elem.matchKey == key) {
+                    //console.debug("removing:", elem.matchValue)
+                    matchModel.remove(count - i);
+                } else {
+                    //console.debug("not removed")
+                    i++
+                }
+            }
+        }
     }
 
     canAccept: journalModel
@@ -93,7 +106,20 @@ Dialog {
                     pageStack.push(datePickerComponent, { date: sinceDate.selectedDate })
                 }
             }
+            ButtonLayout {
+                anchors.horizontalCenter: parent.horizontalCenter
 
+                Button {
+                    text: qsTr("Clear log")
+                    enabled: journalModel
+                    onClicked: {
+                        journalModel.clear()
+                        pageStack.navigateBack()
+                    }
+                }
+            }
+
+            SectionHeader{ text: qsTr("Filter List") }
             Repeater {
                 model: matchModel
                 delegate: Component {
@@ -144,6 +170,80 @@ Dialog {
                     }
                 }
             }
+            ButtonLayout {
+                anchors.horizontalCenter: parent.horizontalCenter
+
+                Button {
+                    text: qsTr("Clear filters")
+                    enabled: journalModel
+                    visible: matchModel.count > 0
+                    onClicked: {
+                        journalModel.flushMatches()
+                        matchModel.clear()
+                    }
+                }
+
+            }
+
+            SectionHeader{ text: qsTr("Filtering") }
+
+            Slider { id: maxLevel
+                width: parent.width
+                readonly property var levels: [
+                    "emerg", "alert", "crit", "err",
+                    "warning", "notice", "info", "debug"
+                ]
+                label: qsTr("Log Level")
+                minimumValue: 1
+                maximumValue: levels.length-1
+                stepSize: 1
+                property real defaultValue: maximumValue
+                value: defaultValue
+                valueText: levels[Math.floor(sliderValue)]
+                onDownChanged: {
+                    if (down) return
+                    matchModel.rmFilter("_PRIORITY")
+                    for ( var l = 0; l <= maxLevel.sliderValue; ++l) {
+                      matchModel.append({matchKey: "_PRIORITY", matchValue: "" + l})
+                    }
+                }
+            }
+
+            ComboBox {
+                id: transportFilter
+                label: qsTr("Transport")
+                currentIndex: -1
+                property string defaultValue: qsTr("Click to add transport filter")
+                value: (currentItem !== null && currentItem.text !== defaultValue) ? currentItem.text : defaultValue
+                onCurrentIndexChanged: {
+                    if (currentIndex >= 0) {
+                        matchModel.append({matchKey: "_TRANSPORT", matchValue: currentItem.identifier})
+                        currentIndex = -1
+                    }
+                }
+                menu: ContextMenu {
+                    MenuItem {
+                        text: qsTr("Journal")
+                        property string identifier: "journal"
+                    }
+                    MenuItem {
+                        text: qsTr("Syslog")
+                        property string identifier: "syslog"
+                    }
+                    MenuItem {
+                        text: qsTr("Standard Output")
+                        property string identifier: "stdout"
+                    }
+                    MenuItem {
+                        text: qsTr("Kernel")
+                        property string identifier: "kernel"
+                    }
+                    MenuItem {
+                        text: qsTr("Driver")
+                        property string identifier: "driver"
+                    }
+                }
+            }
 
             ComboBox {
                 id: newMatchFilter
@@ -155,18 +255,22 @@ Dialog {
                     MenuItem {
                         text: qsTr("Syslog identifier")
                         property string identifier: "SYSLOG_IDENTIFIER"
+                        property bool textinput: true
                     }
                     MenuItem {
                         text: qsTr("Executable path")
                         property string identifier: "_EXE"
+                        property bool textinput: true
                     }
                     MenuItem {
                         text: qsTr("Exact message")
                         property string identifier: "MESSAGE"
+                        property bool textinput: true
                     }
                     MenuItem {
                         text: qsTr("Custom match rule")
                         property string identifier: ""
+                        property bool textinput: true
                     }
                 }
             }
@@ -205,30 +309,6 @@ Dialog {
                 function reset() {
                     text = ""
                     newMatchFilter.currentIndex = -1
-                }
-            }
-
-            Row {
-                anchors.horizontalCenter: parent.horizontalCenter
-                spacing: Theme.paddingMedium
-
-                Button {
-                    text: qsTr("Clear matches")
-                    enabled: journalModel
-                    visible: matchModel.count > 0
-                    onClicked: {
-                        journalModel.flushMatches()
-                        matchModel.clear()
-                    }
-                }
-
-                Button {
-                    text: qsTr("Clear log")
-                    enabled: journalModel
-                    onClicked: {
-                        journalModel.clear()
-                        pageStack.navigateBack()
-                    }
                 }
             }
         }
