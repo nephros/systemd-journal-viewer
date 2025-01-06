@@ -5,4 +5,4 @@ Requires=dbus.service
 [Service]
 Type=dbus
 ExecStart=/usr/bin/invoker -s --type=generic /usr/bin/systemd-journal-daemon
-BusName=ru.omprussia.systemd.journal
+BusName=org.coderus.systemd.journal

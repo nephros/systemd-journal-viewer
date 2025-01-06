@@ -29,7 +29,7 @@ void Adaptor::start()
         qCritical() << "Cannot register object";
         qApp->quit();
     }
-    if (!QDBusConnection::sessionBus().registerService(QStringLiteral("ru.omprussia.systemd.journal"))) {
+    if (!QDBusConnection::sessionBus().registerService(QStringLiteral("org.coderus.systemd.journal"))) {
         qCritical() << "Cannot register service";
         qApp->quit();
     }
@@ -97,7 +97,9 @@ void Adaptor::saveJournal()
         }
 
         QProcess tar;
-        QString filename = QStandardPaths::writableLocation(QStandardPaths::DocumentsLocation) + QStringLiteral("/journal-%1.tar").arg(QDateTime::currentDateTime().toString(QStringLiteral("yyyy-MM-dd_hh-mm-ss-zzz")));
+        QString filename = QStringLiteral("%1/journal-%2.tar")
+            .arg(QStandardPaths::writableLocation(QStandardPaths::DocumentsLocation))
+            .arg(QDateTime::currentDateTime().toString(QStringLiteral("yyyy-MM-dd_hh-mm-ss-zzz")));
         tar.start(QStringLiteral("/bin/tar"), { QStringLiteral("cvf"), filename, location });
         tar.waitForFinished(-1);
         if (!QFileInfo::exists(filename)) {
@@ -108,7 +110,7 @@ void Adaptor::saveJournal()
         const struct group *userGroup = getgrgid(100000);
         const struct passwd *userPasswd = getpwuid(100000);
 
-        (void)!chown(filename.toLatin1().constData(), userPasswd->pw_uid, userGroup->gr_gid);
-        (void)!chmod(filename.toLatin1().constData(), 0644);
+        chown(filename.toLatin1().constData(), userPasswd->pw_uid, userGroup->gr_gid);
+        chmod(filename.toLatin1().constData(), 0644);
     }
 }

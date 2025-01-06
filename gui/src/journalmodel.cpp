@@ -6,14 +6,14 @@
 
 JournalModel::JournalModel(QObject *parent)
     : QAbstractListModel(parent)
-    , m_iface(new QDBusInterface(QStringLiteral("ru.omprussia.systemd.journal"),
+    , m_iface(new QDBusInterface(QStringLiteral("org.coderus.systemd.journal"),
                                  QStringLiteral("/"),
-                                 QStringLiteral("ru.omprussia.systemd.journal"),
+                                 QStringLiteral("org.coderus.systemd.journal"),
                                  QDBusConnection::sessionBus(), this))
 {
-    QDBusConnection::sessionBus().connect(QStringLiteral("ru.omprussia.systemd.journal"),
+    QDBusConnection::sessionBus().connect(QStringLiteral("org.coderus.systemd.journal"),
                                           QStringLiteral("/"),
-                                          QStringLiteral("ru.omprussia.systemd.journal"),
+                                          QStringLiteral("org.coderus.systemd.journal"),
                                           QStringLiteral("dataReceived"),
                                           this, SLOT(onDataReceived(QVariantList)));
     m_iface->call(QDBus::NoBlock, QStringLiteral("init"));

@@ -5,6 +5,6 @@
 
 int main(int argc, char *argv[])
 {
-    qmlRegisterType<JournalModel>("org.omprussia.systemd.journal", 1, 0, "JournalModel");
+    qmlRegisterType<JournalModel>("org.coderus.systemd.journal", 1, 0, "JournalModel");
     return SailfishApp::main(argc, argv);
 }

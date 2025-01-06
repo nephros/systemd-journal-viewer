@@ -1,6 +1,6 @@
 import QtQuick 2.0
 import Sailfish.Silica 1.0
-import org.omprussia.systemd.journal 1.0
+import org.coderus.systemd.journal 1.0
 import org.nemomobile.dbus 2.0
 
 Page {
@@ -8,9 +8,9 @@ Page {
 
     DBusInterface {
         id: dbus
-        service: "ru.omprussia.systemd.journal"
+        service: "org.coderus.systemd.journal"
         path: "/"
-        iface: "ru.omprussia.systemd.journal"
+        iface: "org.coderus.systemd.journal"
     }
 
     SilicaFlickable {
