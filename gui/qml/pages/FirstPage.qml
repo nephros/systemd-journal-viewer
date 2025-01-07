@@ -38,10 +38,23 @@ Page {
         }
     }
 
+    BusyLabel { id: busyLabel
+        text: qsTr("Saving…")
+    }
+
+    Timer {
+        id: popupTimer
+        interval: 3000
+        repeat: false
+        property string message
+        onRunningChanged: busyLabel.running = running
+        onTriggered: popup(message)
+    }
+
     PageHeader { id: header
         z: 100
         clip: true
-        title: listView.alternateTitle ? listView.alternateTitle : listView.currentTitle
+        title: qsTr("Journal Viewer")
     }
 
     SilicaListView {
@@ -53,27 +66,19 @@ Page {
         height: parent.height - header.height
         clip: true
 
-        property string currentTitle: qsTr("Journal Viewer")
-        property string alternateTitle
         spacing: Theme.paddingSmall
         verticalLayoutDirection: ListView.BottomToTop
 
-        Timer {
-            id: alternateTimer
-            interval: 3000
-            repeat: false
-            onTriggered: {
-                listView.alternateTitle = ""
-            }
-        }
+        opacity: busyLabel.running ? Theme.opacityFaint : 1.0
+        Behavior on opacity { FadeAnimator {} }
 
         PushUpMenu {
             MenuItem {
                 text: qsTr("Save journal database")
                 onClicked: {
                     dbus.call("saveJournal", [])
-                    listView.alternateTitle = qsTr("Journal saved to Documents")
-                    alternateTimer.start()
+                    popupTimer.message = qsTr("Journal saved to Documents!")
+                    popupTimer.start()
                 }
             }
 
@@ -84,8 +89,8 @@ Page {
                                                     acceptDestination: page,
                                                     acceptDestinationAction: PageStackAction.Pop,
                                                     callback: function(path) {
-                                                        listView.alternateTitle = qsTr("Log saved to %1").arg(path)
-                                                        alternateTimer.start()
+                                                        popupTimer.message = qsTr("Log saved to %1!").arg(path)
+                                                        popupTimer.start()
                                                         journalModel.save(path)
                                                     }
                                                 })
