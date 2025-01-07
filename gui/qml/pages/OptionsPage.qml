@@ -202,9 +202,9 @@ Dialog {
                 valueText: levels[Math.floor(sliderValue)]
                 onDownChanged: {
                     if (down) return
-                    matchModel.rmFilter("_PRIORITY")
+                    matchModel.rmFilter("PRIORITY")
                     for ( var l = 0; l <= maxLevel.sliderValue; ++l) {
-                      matchModel.append({matchKey: "_PRIORITY", matchValue: "" + l})
+                      matchModel.append({matchKey: "PRIORITY", matchValue: "" + l})
                     }
                 }
             }
@@ -255,22 +255,22 @@ Dialog {
                     MenuItem {
                         text: qsTr("Syslog identifier")
                         property string identifier: "SYSLOG_IDENTIFIER"
-                        property bool textinput: true
+                    }
+                    MenuItem {
+                        text: qsTr("Command name")
+                        property string identifier: "_COMM"
                     }
                     MenuItem {
                         text: qsTr("Executable path")
                         property string identifier: "_EXE"
-                        property bool textinput: true
                     }
                     MenuItem {
                         text: qsTr("Exact message")
                         property string identifier: "MESSAGE"
-                        property bool textinput: true
                     }
                     MenuItem {
                         text: qsTr("Custom match rule")
                         property string identifier: ""
-                        property bool textinput: true
                     }
                 }
             }
