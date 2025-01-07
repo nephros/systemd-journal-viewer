@@ -13,6 +13,8 @@ OTHER_FILES += qml/systemd-journal-viewer.qml \
 
 SAILFISHAPP_ICONS = 86x86 108x108 128x128 256x256
 
+TRANSLATIONS += translations/systemd-journal-viewer-de.ts
+
 CONFIG += sailfishapp_i18n
 
 HEADERS += \
