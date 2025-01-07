@@ -39,6 +39,15 @@ BuildRequires:  pkgconfig(systemd)
 %description
 %{summary}.
 
+Application showing new log messages since launching.
+
+Features:
+
+  • Saving log to selected location
+  • Options to load last N log messages or all messages since specific timestamp
+  • Options to add journal match filters
+  • Copy single messages with longtap menu
+
 %if "%{?vendor}" == "chum"
 Title: Journal Viewer
 Type: desktop-application
@@ -82,3 +91,5 @@ desktop-file-install --delete-original       \
 %{_datadir}/%{name}
 %{_datadir}/applications/%{name}.desktop
 %{_datadir}/icons/hicolor/*/apps/%{name}.png
+
+
