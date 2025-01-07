@@ -118,73 +118,6 @@ Dialog {
                     }
                 }
             }
-
-            SectionHeader{ text: qsTr("Filter List") }
-            Repeater {
-                model: matchModel
-                delegate: Component {
-                    ListItem {
-                        id: delegate
-                        anchors.left: parent.left
-                        anchors.right: parent.right
-                        anchors.margins: Theme.horizontalPageMargin
-                        menu: ContextMenu {
-                            MenuItem {
-                                text: qsTr("Remove")
-                                onClicked: {
-                                    matchModel.remove(index)
-                                }
-                            }
-                        }
-                        contentHeight: visible ? Math.max(column.height + 2*Theme.paddingMedium, Theme.itemSizeSmall) : 0
-                        Column {
-                            id: column
-
-                            anchors {
-                                left: parent.left; right: parent.right; verticalCenter: parent.verticalCenter
-                                leftMargin: root.leftMargin; rightMargin: root.rightMargin
-                            }
-                            Flow {
-                                id: flow
-
-                                width: parent.width
-                                move: Transition { NumberAnimation { properties: "x,y"; easing.type: Easing.InOutQuad; duration: root._duration } }
-
-                                Label {
-                                    id: titleText
-                                    color: root.down ? Theme.highlightColor : Theme.primaryColor
-                                    width: Math.min(implicitWidth + Theme.paddingMedium, parent.width)
-                                    truncationMode: TruncationMode.Fade
-                                    text: matchKey
-                                }
-
-                                Label {
-                                    id: valueText
-                                    color: Theme.highlightColor
-                                    width: Math.min(implicitWidth, parent.width)
-                                    truncationMode: TruncationMode.Fade
-                                    text: matchValue
-                                }
-                            }
-                        }
-                    }
-                }
-            }
-            ButtonLayout {
-                anchors.horizontalCenter: parent.horizontalCenter
-
-                Button {
-                    text: qsTr("Clear filters")
-                    enabled: journalModel
-                    visible: matchModel.count > 0
-                    onClicked: {
-                        journalModel.flushMatches()
-                        matchModel.clear()
-                    }
-                }
-
-            }
-
             SectionHeader{ text: qsTr("Filtering") }
 
             Slider { id: maxLevel
@@ -311,7 +244,74 @@ Dialog {
                     newMatchFilter.currentIndex = -1
                 }
             }
-        }
+
+            ButtonLayout {
+                anchors.horizontalCenter: parent.horizontalCenter
+
+                Button {
+                    text: qsTr("Clear filters")
+                    enabled: journalModel
+                    visible: matchModel.count > 0
+                    onClicked: {
+                        journalModel.flushMatches()
+                        matchModel.clear()
+                    }
+                }
+
+            }
+            SectionHeader{ text: qsTr("Filter List") }
+            Repeater {
+                model: matchModel
+                delegate: Component {
+                    ListItem {
+                        id: delegate
+                        anchors.left: parent.left
+                        anchors.right: parent.right
+                        anchors.margins: Theme.horizontalPageMargin
+                        menu: ContextMenu {
+                            MenuItem {
+                                text: qsTr("Remove")
+                                onClicked: {
+                                    matchModel.remove(index)
+                                }
+                            }
+                        }
+                        contentHeight: visible ? Math.max(column.height + 2*Theme.paddingMedium, Theme.itemSizeSmall) : 0
+                        Column {
+                            id: column
+
+                            anchors {
+                                left: parent.left; right: parent.right; verticalCenter: parent.verticalCenter
+                                leftMargin: root.leftMargin; rightMargin: root.rightMargin
+                            }
+                            Flow {
+                                id: flow
+
+                                width: parent.width
+                                move: Transition { NumberAnimation { properties: "x,y"; easing.type: Easing.InOutQuad; duration: root._duration } }
+
+                                Label {
+                                    id: titleText
+                                    color: root.down ? Theme.highlightColor : Theme.primaryColor
+                                    width: Math.min(implicitWidth + Theme.paddingMedium, parent.width)
+                                    truncationMode: TruncationMode.Fade
+                                    text: matchKey
+                                }
+
+                                Label {
+                                    id: valueText
+                                    color: Theme.highlightColor
+                                    width: Math.min(implicitWidth, parent.width)
+                                    truncationMode: TruncationMode.Fade
+                                    text: matchValue
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+
+}
 
         VerticalScrollDecorator {}
     }
