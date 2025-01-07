@@ -45,6 +45,14 @@
         <source>Journal saved to Documents</source>
         <translation type="unfinished"></translation>
     </message>
+    <message>
+        <source>Waiting for messages…</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Swipe right to adjust filters.</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>OptionsPage</name>
@@ -70,10 +78,6 @@
     </message>
     <message>
         <source>Custom match rule</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Clear matches</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -114,6 +118,54 @@
     </message>
     <message>
         <source>Cancel</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Filtering</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Log Level</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Transport</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Click to add transport filter</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Journal</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Syslog</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Standard Output</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Kernel</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Driver</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Command name</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Clear filters</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Filter List</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
