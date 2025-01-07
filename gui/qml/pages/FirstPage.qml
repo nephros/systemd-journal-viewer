@@ -38,15 +38,23 @@ Page {
         }
     }
 
+    PageHeader { id: header
+        z: 100
+        clip: true
+        title: listView.alternateTitle ? listView.alternateTitle : listView.currentTitle
+    }
+
     SilicaListView {
         id: listView
         model: journalModel
-        anchors.fill: parent
+
+        anchors.top: header.bottom
+        width: parent.width
+        height: parent.height - header.height
+        clip: true
+
         property string currentTitle: qsTr("Journal Viewer")
         property string alternateTitle
-        header: PageHeader {
-            title: listView.alternateTitle ? listView.alternateTitle : listView.currentTitle
-        }
         spacing: Theme.paddingSmall
         verticalLayoutDirection: ListView.BottomToTop
 
