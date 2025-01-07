@@ -13,45 +13,46 @@ Page {
         iface: "org.coderus.systemd.journal"
     }
 
-    SilicaFlickable {
-        anchors.fill: parent
-        contentHeight: content.height
+    BusyLabel { id: busyLabel
+        text: qsTr("Saving…")
+        running: saveTimer.running
+    }
 
-        Column {
-            id: content
-            width: parent.width
-            spacing: Theme.paddingSmall
+    Timer {
+        id: saveTimer
+        repeat: false
+        interval: 3000
+        property string notification: qsTr("Journal saved to Documents!")
+        onTriggered: {
+            popup(notification)
+        }
+    }
+    PageHeader {
+        title: qsTr("System Journal")
+    }
+    Column {
+        id: content
+        anchors.centerIn: parent
+        width: parent.width
+        spacing: Theme.paddingLarge
 
-            PageHeader {
-                title: qsTr("System Journal")
-            }
+        opacity: busyLabel.running ? Theme.opacityFaint : 1.0
+        Behavior on opacity { FadeAnimator {} }
 
-            Button {
-                anchors.horizontalCenter: parent.horizontalCenter
-                text: qsTr("Read logs")
-                onClicked: pageStack.replace(Qt.resolvedUrl("FirstPage.qml"))
-            }
+        Button {
+            anchors.horizontalCenter: parent.horizontalCenter
+            text: qsTr("Read logs")
+            onClicked: pageStack.replace(Qt.resolvedUrl("FirstPage.qml"))
+        }
 
-            Button {
-                id: saveButton
-                anchors.horizontalCenter: parent.horizontalCenter
-                property string label: qsTr("Save journal")
-                property string notification: qsTr("Journal saved to Documents!")
-                text: label
-                onClicked: {
-                    dbus.call("saveJournal", [])
-                    saveTimer.start()
-                    text = notification
-                }
-
-                Timer {
-                    id: saveTimer
-                    repeat: false
-                    interval: 3000
-                    onTriggered: {
-                        saveButton.text =saveButton.label
-                    }
-                }
+        Button {
+            id: saveButton
+            anchors.horizontalCenter: parent.horizontalCenter
+            text: qsTr("Save journal")
+            enabled: !saveTimer.running
+            onClicked: {
+                dbus.call("saveJournal", [])
+                saveTimer.start()
             }
         }
     }
