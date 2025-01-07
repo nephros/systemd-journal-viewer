@@ -46,12 +46,12 @@
         <translation>Journal unter Dokumente gespeichert</translation>
     </message>
     <message>
-        <source>Waiting for messages…</source>
-        <translation>Warte auf Einträge…</translation>
-    </message>
-    <message>
         <source>Swipe right to adjust filters.</source>
         <translation>Wische nach rechts zum Anpassen der Filter</translation>
+    </message>
+    <message>
+        <source>Waiting for messages…</source>
+        <translation>Warte auf Einträge…</translation>
     </message>
 </context>
 <context>
@@ -62,7 +62,7 @@
     </message>
     <message>
         <source>Remove</source>
-        <translation>Entfernene</translation>
+        <translation>Entfernen</translation>
     </message>
     <message>
         <source>Add match filter</source>
@@ -177,7 +177,7 @@
     </message>
     <message>
         <source>Read logs</source>
-        <translation>Lognachrichten ansehen</translation>
+        <translation>Log-Einträge ansehen</translation>
     </message>
     <message>
         <source>Save journal</source>
