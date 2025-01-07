@@ -30,10 +30,6 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Log saved to %1</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <source>Save log to file</source>
         <translation type="unfinished"></translation>
     </message>
@@ -42,15 +38,23 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Journal saved to Documents</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <source>Waiting for messages…</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Swipe right to adjust filters.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Journal saved to Documents!</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Log saved to %1!</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Saving…</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -185,6 +189,17 @@
     </message>
     <message>
         <source>Journal saved to Documents!</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Saving…</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>systemd-journal-viewer</name>
+    <message>
+        <source>Journal Viewer</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
