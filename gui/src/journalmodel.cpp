@@ -127,14 +127,14 @@ QVariant JournalModel::unwind(const QVariant &val, int depth)
      * Using limit >= DBUS_MAXIMUM_TYPE_RECURSION_DEPTH (=32) should
      * mean we do not bail out too soon on deeply nested but othewise
      * valid dbus messages. */
-    static const int maximum_dept = 32;
+    static const int maximum_depth = 32;
 
     /* Default to QVariant with isInvalid() == true */
     QVariant res;
 
     const int type = val.userType();
 
-    if( ++depth > maximum_dept ) {
+    if( ++depth > maximum_depth ) {
         /* Leave result to invalid variant */
         qWarning() << "Too deep recursion detected at userType:" << type;
     }
