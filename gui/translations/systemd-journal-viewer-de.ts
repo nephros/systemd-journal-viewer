@@ -31,7 +31,7 @@
     </message>
     <message>
         <source>Log saved to %1</source>
-        <translation>Log unter %1 gespeichert</translation>
+        <translation type="vanished">Log unter %1 gespeichert</translation>
     </message>
     <message>
         <source>Save log to file</source>
@@ -43,7 +43,7 @@
     </message>
     <message>
         <source>Journal saved to Documents</source>
-        <translation>Journal unter Dokumente gespeichert</translation>
+        <translation type="vanished">Journal unter Dokumente gespeichert</translation>
     </message>
     <message>
         <source>Swipe right to adjust filters.</source>
@@ -52,6 +52,18 @@
     <message>
         <source>Waiting for messages…</source>
         <translation>Warte auf Einträge…</translation>
+    </message>
+    <message>
+        <source>Journal saved to Documents!</source>
+        <translation>Journal unter Dokumente gespeichert!</translation>
+    </message>
+    <message>
+        <source>Log saved to %1!</source>
+        <translation>Log unter %1! gespeichert</translation>
+    </message>
+    <message>
+        <source>Saving…</source>
+        <translation>Speichere…</translation>
     </message>
 </context>
 <context>
@@ -186,6 +198,17 @@
     <message>
         <source>Journal saved to Documents!</source>
         <translation>Journal unter Dokumente gespeichert!</translation>
+    </message>
+    <message>
+        <source>Saving…</source>
+        <translation>Speichere…</translation>
+    </message>
+</context>
+<context>
+    <name>systemd-journal-viewer</name>
+    <message>
+        <source>Journal Viewer</source>
+        <translation>Journal Viewer</translation>
     </message>
 </context>
 </TS>
