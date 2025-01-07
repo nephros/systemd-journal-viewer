@@ -142,6 +142,13 @@ Page {
                 }
             }
         }
+
+        ViewPlaceholder {
+             enabled: listView.count == 0
+             text: qsTr("Waiting for messages…")
+             hintText: qsTr("Swipe right to adjust filters.")
+        }
+
         VerticalScrollDecorator {}
     }
 }
